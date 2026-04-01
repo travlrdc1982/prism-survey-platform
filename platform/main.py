@@ -64,8 +64,11 @@ logging.basicConfig(level=logging.INFO)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Startup and shutdown."""
-    init_db_pool()
+    """Startup and shutdown. Pool init is best-effort for serverless."""
+    try:
+        init_db_pool()
+    except Exception as e:
+        logger.warning(f"DB pool init deferred (serverless ok): {e}")
     logger.info("PRISM Survey Platform started")
     yield
     logger.info("PRISM Survey Platform shutting down")
