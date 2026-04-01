@@ -568,7 +568,6 @@ async def admin_initialize(
         conn        = db,
         study_code  = payload.study_code,
         n_base      = payload.n_base,
-        study_config = study_config,
     )
 
     # Generate and persist BIBD design if needed
