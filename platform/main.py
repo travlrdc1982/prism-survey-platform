@@ -246,6 +246,9 @@ async def submit_typing(
         )
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        logger.error(f"Typing failed for resp_id={payload.resp_id}: {e}")
+        raise HTTPException(status_code=500, detail=f"Typing error: {e}")
 
     session.record_typing_result(
         segment_id      = result.segment_id,
@@ -266,13 +269,17 @@ async def submit_typing(
     screener_data = session.get_screener_data()
 
     # ── 3. Route via DQMA ─────────────────────────────────────────────────
-    assigned_study = route_respondent(
-        conn            = db,
-        resp_id         = payload.resp_id,
-        segment_id      = result.segment_id,
-        seg_probability = result.seg_probability,
-        screener_data   = screener_data,
-    )
+    try:
+        assigned_study = route_respondent(
+            conn            = db,
+            resp_id         = payload.resp_id,
+            segment_id      = result.segment_id,
+            seg_probability = result.seg_probability,
+            screener_data   = screener_data,
+        )
+    except Exception as e:
+        logger.error(f"DQMA routing failed for resp_id={payload.resp_id}: {e}")
+        raise HTTPException(status_code=500, detail=f"Routing error: {e}")
 
     if assigned_study is None:
         # No study available — overquota or all studies closed
