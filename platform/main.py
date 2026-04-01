@@ -69,9 +69,38 @@ async def lifespan(app: FastAPI):
         init_db_pool()
     except Exception as e:
         logger.warning(f"DB pool init deferred (serverless ok): {e}")
+        # Patch get_db to use simple connections for serverless
+        import config as _cfg
+        _cfg._serverless_mode = True
     logger.info("PRISM Survey Platform started")
     yield
     logger.info("PRISM Survey Platform shutting down")
+
+
+def _get_db_serverless():
+    """Serverless-compatible DB connection — no pool, just connect/close."""
+    import psycopg2 as _pg2
+    settings = get_settings()
+    conn = _pg2.connect(settings.database_url)
+    try:
+        yield conn
+    except Exception:
+        conn.rollback()
+        raise
+    finally:
+        conn.close()
+
+
+# Override get_db to fall back to serverless mode
+_original_get_db = get_db
+
+def get_db_with_fallback():
+    """Try pool first, fall back to direct connection."""
+    import config as _cfg
+    if getattr(_cfg, '_serverless_mode', False) or _cfg._pool is None:
+        yield from _get_db_serverless()
+    else:
+        yield from _original_get_db()
 
 
 app = FastAPI(
@@ -79,6 +108,8 @@ app = FastAPI(
     version="1.0.0",
     lifespan=lifespan,
 )
+
+app.dependency_overrides[get_db] = get_db_with_fallback
 
 
 # ── PYDANTIC MODELS ───────────────────────────────────────────────────────────
