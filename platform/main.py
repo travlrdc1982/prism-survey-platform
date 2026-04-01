@@ -77,13 +77,85 @@ async def lifespan(app: FastAPI):
     logger.info("PRISM Survey Platform shutting down")
 
 
+class _UpperKeyConnection:
+    """
+    Wraps a psycopg2 connection so that DictCursor returns uppercase keys
+    for columns that DQMA expects (Q, C, OQT, TERM).
+
+    PostgreSQL folds unquoted column names to lowercase, but DQMA's queries
+    reference them as uppercase via DictCursor. This shim translates.
+    """
+
+    _UPPER_COLS = {'q', 'c', 'oqt', 'term'}
+
+    def __init__(self, conn):
+        self._conn = conn
+
+    def cursor(self, cursor_factory=None, **kwargs):
+        import psycopg2.extras
+        real_cur = self._conn.cursor(cursor_factory=cursor_factory, **kwargs)
+        if cursor_factory in (psycopg2.extras.DictCursor, psycopg2.extras.RealDictCursor):
+            return _UpperKeyCursor(real_cur, self._UPPER_COLS)
+        return real_cur
+
+    def commit(self):
+        return self._conn.commit()
+
+    def rollback(self):
+        return self._conn.rollback()
+
+    def close(self):
+        return self._conn.close()
+
+    def __getattr__(self, name):
+        return getattr(self._conn, name)
+
+
+class _UpperKeyCursor:
+    """Wraps a DictCursor to uppercase select column keys."""
+
+    def __init__(self, cursor, upper_cols):
+        self._cursor = cursor
+        self._upper_cols = upper_cols
+
+    def _fix_row(self, row):
+        if row is None:
+            return None
+        if isinstance(row, dict):
+            return {(k.upper() if k in self._upper_cols else k): v for k, v in row.items()}
+        # psycopg2 DictRow — convert to dict first
+        try:
+            d = dict(row)
+            return {(k.upper() if k in self._upper_cols else k): v for k, v in d.items()}
+        except Exception:
+            return row
+
+    def fetchone(self):
+        return self._fix_row(self._cursor.fetchone())
+
+    def fetchall(self):
+        return [self._fix_row(r) for r in self._cursor.fetchall()]
+
+    def execute(self, *args, **kwargs):
+        return self._cursor.execute(*args, **kwargs)
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *args):
+        self._cursor.close()
+
+    def __getattr__(self, name):
+        return getattr(self._cursor, name)
+
+
 def _get_db_serverless():
     """Serverless-compatible DB connection — no pool, just connect/close."""
     import psycopg2 as _pg2
     settings = get_settings()
     conn = _pg2.connect(settings.database_url)
     try:
-        yield conn
+        yield _UpperKeyConnection(conn)
     except Exception:
         conn.rollback()
         raise
@@ -100,7 +172,8 @@ def get_db_with_fallback():
     if getattr(_cfg, '_serverless_mode', False) or _cfg._pool is None:
         yield from _get_db_serverless()
     else:
-        yield from _original_get_db()
+        for conn in _original_get_db():
+            yield _UpperKeyConnection(conn)
 
 
 app = FastAPI(
