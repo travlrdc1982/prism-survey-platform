@@ -45,12 +45,12 @@ from dqma import (
 from roi import compute_roi, write_roi_result
 from bibd import generate_bibd, bibd_for_study
 
-from export import export_sav
+from export import export_spss
 from config import (
     get_settings, init_db_pool, get_db,
     load_study_config, get_all_study_codes,
 )
-from typing_tool import type_respondent, determine_party_block
+from typing_tool import type_respondent, determine_batteries
 from session import (
     create_session, load_session,
     assign_random_split, assign_eligibility_gated_split,
@@ -489,7 +489,7 @@ async def admin_export(
     """
     study_config = load_study_config(study_code)
     try:
-        sav_bytes = export_sav(conn=db, study_code=study_code, study_config=study_config)
+        sav_bytes = export_spss(conn=db, study_code=study_code, study_config=study_config)
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
     except Exception as e:
