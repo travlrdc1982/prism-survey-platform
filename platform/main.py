@@ -40,6 +40,7 @@ from roi import compute_roi, write_roi_result
 from bibd import generate_bibd, bibd_for_study
 
 from export import export_sav
+from config import (
     get_settings, init_db_pool, get_db,
     load_study_config, get_all_study_codes,
 )
@@ -360,11 +361,14 @@ async def submit_study_page(
     session = load_session(payload.resp_id, db)
     session.record_responses(page_id, payload.responses)
 
+    study_config = load_study_config(session.study_code)
+    next_page = _get_next_page(page_id, study_config, session)
+
     return {
         "resp_id": payload.resp_id,
         "page_id": page_id,
-        "status":  "ok",
-        "next":    _get_next_page(page_id, load_study_config(session.study_code)),
+        "status":  "ok" if next_page else "complete",
+        "next":    next_page or "complete",
     }
 
 
@@ -787,10 +791,7 @@ def _resolve_investment(study_config: dict, xinvestvar: Optional[str]) -> dict:
     }
 
 
-def _get_next_page(current_page: str, study_config: dict) -> Optional[str]:
-    """
-    Return the next page ID after the current one.
-    Developer implements full page flow logic from config structure.
-    This is a placeholder returning None (study complete signal).
-    """
-    return None
+def _get_next_page(current_page: str, study_config: dict, session) -> Optional[str]:
+    """Delegate to page_flow module."""
+    from page_flow import get_next_page
+    return get_next_page(current_page, study_config, session)
