@@ -1,0 +1,1278 @@
+{
+  "_schema_version": "2.6.0",
+  "_study": "AL",
+  "_layer": "study_config",
+  "_note": "Layer 2 only — study-specific content. Platform constants (screeners, typing tool, Inf360, demographics, opt-in, design tokens, component registry) are hardcoded Layer 1. Normative data (Z-norms, centroids) live in Layer 3 (prism_norms.db).",
+  "study": {
+    "study_code": "AL",
+    "topic_prefix": "AL",
+    "client_label": "American Leadership — Biopharmaceutical Innovation & Manufacturing",
+    "active": true,
+    "scale": 7
+  },
+  "routing": {
+    "target_n_per_segment": 75
+  },
+  "dynata": {
+    "integration_type": "TBD",
+    "_action": "Confirm REX API vs Samplify with account manager. Set to 'rex' or 'samplify'.",
+    "complete_redirect": "https://www.samplicio.us/router/complete?psid={psid}",
+    "overquota_redirect": "https://www.samplicio.us/router/overquota?psid={psid}",
+    "terminate_redirect": "https://www.samplicio.us/router/terminate?psid={psid}"
+  },
+  "split_design": {
+    "split_var": "Xrandom4",
+    "persona_variant_value": "r1",
+    "control_value": "r2",
+    "split_ratio": "50/50",
+    "_note": "Persona variant: MSG MaxDiff items personalized by XSEG_ASSIGNED. Control: generic control_text for all items."
+  },
+  "internal_splits": {
+    "Xrandom2": {
+      "description": "SECTORFAV and JOBALIGN physician vs association name split",
+      "r1": "Individual clinicians (Pediatricians, Family Physicians, Medical scientists)",
+      "r2": "Professional associations (AAP, AAFP, IDSA)"
+    }
+  },
+  "critics_enabled": false,
+  "intro_text": "Now, let's focus on the biopharmaceutical industry and America's role as a global leader in medicine innovation and manufacturing.",
+  "investment_variable": {
+    "routing_var": "XINVESTVAR",
+    "quota_sheet": "INVESTVAR",
+    "eligibility_note": "Respondent must have rated relevant company as familiar (not c12=99) in CORPFAV pre-test.",
+    "awareness_question": "Had you seen or heard anything about this news before now?",
+    "awareness_options": [
+      "Yes, I heard quite a bit",
+      "Yes, I've heard a little about this",
+      "Yes, but I don't recall any details",
+      "No, I had not heard anything about this until now",
+      "Not sure"
+    ],
+    "variants": [
+      {
+        "var": "r1",
+        "company": "INDUSTRY_CONTROL",
+        "stimulus": "The US biopharmaceutical industry has announced that it will be investing $500 billion in new US manufacturing over the next ten years."
+      },
+      {
+        "var": "r2",
+        "company": "Pfizer",
+        "stimulus": "Pfizer announced it will be investing $83 billion in American biotech research and manufacturing."
+      },
+      {
+        "var": "r3",
+        "company": "BMS",
+        "stimulus": "Bristol Myers Squibb ('BMS') announced plans to invest $40 billion over the next five years across R&D, technology, and manufacturing in the United States."
+      },
+      {
+        "var": "r4",
+        "company": "Amgen",
+        "stimulus": "Amgen has committed to investing $40 billion in R&D and manufacturing, including a $900 million manufacturing expansion in Central Ohio."
+      },
+      {
+        "var": "r5",
+        "company": "Lilly",
+        "stimulus": "Eli Lilly announced $50 billion capital investment to expand U.S. manufacturing commitment, with new sites planned in Texas and Virginia."
+      },
+      {
+        "var": "r6",
+        "company": "Novartis",
+        "stimulus": "Novartis announced a $23 billion investment in the U.S. over the next five years."
+      },
+      {
+        "var": "r7",
+        "company": "Merck",
+        "stimulus": "Merck announced more than $9 billion in U.S. investments to expand manufacturing capacity."
+      }
+    ]
+  },
+  "pre_test": {
+    "questions": [
+      {
+        "var": "SECTORFAV",
+        "component": "STYLE.MATRIX",
+        "scale": [
+          0,
+          10
+        ],
+        "left_anchor": "Very Unfavorable (0)",
+        "right_anchor": "Very Favorable (10)",
+        "has_not_familiar": true,
+        "not_familiar_value": 99,
+        "shuffle": true,
+        "question_text": "Rate your overall impressions of each of the following",
+        "comments_text": "Rate your impressions on a scale from zero (0) to ten (10) where zero means you have very unfavorable impressions and ten means you have very favorable impressions. Unless you are completely unfamiliar with the institution, we'd appreciate if you would share your general impressions.",
+        "items_always": [
+          {
+            "var": "SECTORFAV_r1",
+            "text": "Biopharmaceutical companies"
+          },
+          {
+            "var": "SECTORFAV_r2",
+            "text": "Health insurance companies"
+          },
+          {
+            "var": "SECTORFAV_r3",
+            "text": "Hospitals"
+          },
+          {
+            "var": "SECTORFAV_r7",
+            "text": "Automobile manufacturers"
+          },
+          {
+            "var": "SECTORFAV_r8",
+            "text": "Oil and gas companies"
+          },
+          {
+            "var": "SECTORFAV_r9",
+            "text": "Artificial Intelligence / Technology companies"
+          },
+          {
+            "var": "SECTORFAV_r10",
+            "text": "NIH (National Institutes of Health)"
+          },
+          {
+            "var": "SECTORFAV_r11",
+            "text": "CDC (Centers for Disease Control)"
+          },
+          {
+            "var": "SECTORFAV_r12",
+            "text": "FDA (Food and Drug Administration)"
+          }
+        ],
+        "items_split_a": [
+          {
+            "var": "SECTORFAV_r4A",
+            "text": "Pediatricians"
+          },
+          {
+            "var": "SECTORFAV_r5A",
+            "text": "Family Physicians"
+          },
+          {
+            "var": "SECTORFAV_r6A",
+            "text": "Medical scientists"
+          }
+        ],
+        "items_split_b": [
+          {
+            "var": "SECTORFAV_r4B",
+            "text": "American Academy of Pediatrics (AAP)"
+          },
+          {
+            "var": "SECTORFAV_r5B",
+            "text": "American Academy of Family Physicians (AAFP)"
+          },
+          {
+            "var": "SECTORFAV_r6B",
+            "text": "Infectious Diseases Society of America (IDSA)"
+          }
+        ]
+      },
+      {
+        "var": "CORPFAV",
+        "component": "STYLE.MATRIX",
+        "scale": [
+          0,
+          10
+        ],
+        "left_anchor": "Very Unfavorable (0)",
+        "right_anchor": "Very Favorable (10)",
+        "has_not_familiar": true,
+        "not_familiar_value": 99,
+        "shuffle": true,
+        "question_text": "Rate your overall impressions of each of the following companies.",
+        "items": [
+          {
+            "var": "CORPFAV_r15",
+            "text": "Pfizer"
+          },
+          {
+            "var": "CORPFAV_r16",
+            "text": "Bristol Myers Squibb (BMS)"
+          },
+          {
+            "var": "CORPFAV_r17",
+            "text": "Amgen"
+          },
+          {
+            "var": "CORPFAV_r18",
+            "text": "Eli Lilly"
+          },
+          {
+            "var": "CORPFAV_r19",
+            "text": "Novartis"
+          },
+          {
+            "var": "CORPFAV_r20",
+            "text": "Merck"
+          },
+          {
+            "var": "CORPFAV_r21",
+            "text": "Johnson & Johnson"
+          },
+          {
+            "var": "CORPFAV_r22",
+            "text": "Ford Motor Company"
+          },
+          {
+            "var": "CORPFAV_r23",
+            "text": "General Motors"
+          },
+          {
+            "var": "CORPFAV_r24",
+            "text": "OpenAI"
+          },
+          {
+            "var": "CORPFAV_r25",
+            "text": "Google"
+          },
+          {
+            "var": "CORPFAV_r26",
+            "text": "Chevron"
+          }
+        ]
+      },
+      {
+        "var": "INVEST_AWARE",
+        "component": "STYLE.RADIO.VERTICAL",
+        "question_text": "Have you heard or seen anything recently about companies committing to significant investments—such as new factories, major expansions, or large job-creation projects—here in the United States?",
+        "options": [
+          "Yes, I've heard a lot about this recently",
+          "Yes, I've heard a little about this recently",
+          "Yes, but I don't recall any details or specific companies",
+          "No, I haven't heard anything about this recently",
+          "Not sure"
+        ]
+      },
+      {
+        "var": "INVEST_AWARE_OE",
+        "component": "STYLE.OPEN.TEXT",
+        "question_text": "What have you heard or seen recently about companies making major investments in the United States? Please describe what you remember.",
+        "min_length": 10
+      },
+      {
+        "var": "INVEST_AWARE_CO",
+        "component": "STYLE.OPEN.TEXT",
+        "question_text": "Do you remember any company names connected to what you heard? If yes, list the names you remember:",
+        "autosuggest_file": "INVEST_AWARE_CO.dat"
+      },
+      {
+        "var": "JOBALIGNA",
+        "component": "STYLE.BUTTON.CARD.SHUFFLE",
+        "condition": "Xrandom2.r1",
+        "question_text": "Thinking about job creation in the United States, how much do you believe each of the following industries creates jobs for people like you?",
+        "options": [
+          "Not at all",
+          "Not very much",
+          "Some",
+          "A great deal"
+        ],
+        "shuffle": true,
+        "items": [
+          {
+            "var": "JOBALIGNA_r1",
+            "text": "Oil & Gas"
+          },
+          {
+            "var": "JOBALIGNA_r2",
+            "text": "Automotive Manufacturing"
+          },
+          {
+            "var": "JOBALIGNA_r3",
+            "text": "Artificial Intelligence / Tech"
+          },
+          {
+            "var": "JOBALIGNA_r4",
+            "text": "Biopharmaceuticals"
+          }
+        ]
+      },
+      {
+        "var": "JOBALIGNB",
+        "component": "STYLE.BUTTON.CARD.SHUFFLE",
+        "condition": "Xrandom2.r2",
+        "question_text": "Thinking about job creation in the United States, how much do you believe each of the following industries creates good jobs in the United States?",
+        "options": [
+          "Not at all",
+          "Not very much",
+          "Some",
+          "A great deal"
+        ],
+        "shuffle": true,
+        "items": [
+          {
+            "var": "JOBALIGNB_r1",
+            "text": "Oil & Gas"
+          },
+          {
+            "var": "JOBALIGNB_r2",
+            "text": "Automotive Manufacturing"
+          },
+          {
+            "var": "JOBALIGNB_r3",
+            "text": "Artificial Intelligence / Tech"
+          },
+          {
+            "var": "JOBALIGNB_r4",
+            "text": "Biopharmaceuticals"
+          }
+        ]
+      },
+      {
+        "var": "FUTUREJOB",
+        "component": "STYLE.RADIO.VERTICAL",
+        "question_text": "If you had to choose one, which of the following industries would you most want your children or grandchildren to work in in the future?",
+        "shuffle": true,
+        "options": [
+          "Oil & Gas",
+          "Automotive Manufacturing",
+          "Artificial Intelligence / Tech",
+          "Biopharmaceuticals",
+          "None of these",
+          "N/A or Unsure"
+        ]
+      },
+      {
+        "var": "JOBMOST",
+        "component": "STYLE.DROPDOWN",
+        "question_text": "Which types of jobs do you most associate with each of the following industries?",
+        "shuffle_rows": true,
+        "shuffle_choices": true,
+        "rows": [
+          "Oil & Gas",
+          "Automotive Manufacturing",
+          "Artificial Intelligence / Tech",
+          "Biopharmaceuticals"
+        ],
+        "choices": [
+          "Front-line manufacturing or production workers",
+          "Skilled trade workers (e.g., electricians, pipefitters, mechanics)",
+          "Scientists or researchers working in labs",
+          "Highly educated professionals (e.g., PhDs, data scientists)",
+          "Engineers or technical specialists",
+          "Corporate or marketing executives",
+          "Administrative or support staff",
+          "None of the above"
+        ]
+      },
+      {
+        "var": "JOBLEAST",
+        "component": "STYLE.DROPDOWN",
+        "question_text": "Which types of jobs do you least associate with each of the following industries?",
+        "shuffle_rows": true,
+        "shuffle_choices": true,
+        "rows": [
+          "Oil & Gas",
+          "Automotive Manufacturing",
+          "Artificial Intelligence / Tech",
+          "Biopharmaceuticals"
+        ],
+        "choices": [
+          "Front-line manufacturing or production workers",
+          "Skilled trade workers (e.g., electricians, pipefitters, mechanics)",
+          "Scientists or researchers working in labs",
+          "Highly educated professionals (e.g., PhDs, data scientists)",
+          "Engineers or technical specialists",
+          "Corporate or marketing executives",
+          "Administrative or support staff",
+          "None of the above"
+        ],
+        "_note": "Platform must exclude the choice selected in JOBMOST for the matching row."
+      },
+      {
+        "var": "AL_PRE_RANK",
+        "component": "STYLE.RANKSORT",
+        "question_text": "Which industries do you think are most important for America to be viewed as a global leader? Rank these industries in order of importance.",
+        "optional": false,
+        "shuffle": true,
+        "min_ranks": 5,
+        "rank_positions": [
+          "Most Important",
+          "2nd most important",
+          "3rd most important",
+          "4th most important",
+          "Least important"
+        ],
+        "rank_values": [
+          5,
+          4,
+          3,
+          2,
+          1
+        ],
+        "items": [
+          {
+            "var": "AL_PRE_RANK_r1",
+            "text": "Oil & Gas"
+          },
+          {
+            "var": "AL_PRE_RANK_r2",
+            "text": "Automotive Manufacturing"
+          },
+          {
+            "var": "AL_PRE_RANK_r3",
+            "text": "Artificial Intelligence / Tech"
+          },
+          {
+            "var": "AL_PRE_RANK_r4",
+            "text": "Biopharmaceuticals"
+          },
+          {
+            "var": "AL_PRE_RANK_r5",
+            "text": "Aerospace"
+          }
+        ]
+      },
+      {
+        "var": "AL_PRE",
+        "component": "STYLE.BUTTON.CARD.SHUFFLE",
+        "question_text": "How important is it for...",
+        "scale_points": 7,
+        "options": [
+          "Not at all Important",
+          "Unimportant",
+          "Somewhat Unimportant",
+          "Neither/Neutral",
+          "Somewhat Important",
+          "Important",
+          "Very Important"
+        ],
+        "shuffle": true,
+        "items": [
+          {
+            "var": "AL_PRE_r1",
+            "text": "New medicines used by American patients are invented and manufactured in the United States"
+          },
+          {
+            "var": "AL_PRE_r2",
+            "text": "Congress to support policies that protect America's leadership in biopharmaceutical innovation and manufacturing"
+          }
+        ]
+      }
+    ]
+  },
+  "msg_maxdiff": {
+    "var": "MSG_MAXDIFF",
+    "question_text": "From the set of short statements on this issue, pick the most and least compelling to you.",
+    "comments_text": "Select one statement that sounds MOST compelling to you, and the one statement that sounds LEAST compelling.",
+    "n_items": 11,
+    "n_tasks": 11,
+    "items_per_task": 4,
+    "bibd_design": "auto",
+    "_note": "Platform selects variant_text[segment_id] for persona variant condition (Xrandom4.r1). Uses control_text for control condition (Xrandom4.r2). XSEG_ASSIGNED must be computed before this page.",
+    "items": [
+      {
+        "item_id": "AL_MSG_1",
+        "control_text": "Investing in U.S. medicine manufacturing is part of America doing big things again, leading the world in the industries that matter most.",
+        "variant_text": {
+          "1": "It's time for America to do big things again—leading the world in medicine manufacturing, an industry that matters to every family paying healthcare bills.",
+          "2": "America doing big things again includes building medicine manufacturing here—where we can set our own standards and aren't dependent on foreign countries with different values.",
+          "3": "America doing big things again means leading in medicine manufacturing—an industry that matters for our families, our security, and our national strength.",
+          "4": "It's time for America to do big things again—leading the world in making medicines here, not surrendering a vital industry to foreign powers and global elites.",
+          "5": "America used to do big things. Leading the world in medicine manufacturing is the kind of industry that matters—one that can deliver for working families, not just Wall Street.",
+          "6": "America doing big things again means taking the lead in medicine manufacturing—an industry that matters for families who want real control over their health choices.",
+          "7": "America must do big things again. Leading the world in medicine manufacturing is exactly the kind of high-stakes industry where American ambition should dominate.",
+          "8": "If America is going to do big things again, leading in medicine manufacturing means building an industry here—where we can see what's happening, not trust foreign black boxes.",
+          "9": "America doing big things again means building medicine manufacturing here—where patients have more choices and aren't dependent on foreign countries for their health options.",
+          "10": "America should do big things again—leading the world in medicine manufacturing, where scientific breakthroughs can reach patients in every community.",
+          "11": "America doing big things again must include tackling the biggest challenges in health care which can't happen if we lose our leadership in developing and making medicines here at home.",
+          "12": "America doing big things again must include leading in medicine manufacturing—an industry that matters for health, jobs, and strong communities.",
+          "13": "America doing big things again means leading in medicine manufacturing—an industry that matters to working families who built this country and deserve these jobs.",
+          "14": "America can and must do big things again—leading the world in medicine manufacturing can help us remain a global leader.",
+          "15": "America can do big things again by leading in medicine manufacturing—an industry that matters for stable jobs and the treatments Americans depend on.",
+          "16": "Investing in U.S. medicine manufacturing is part of America doing big things again and working to solve our most urgent global challenges."
+        }
+      },
+      {
+        "item_id": "AL_MSG_2",
+        "control_text": "America must invent and make critical medicines at home; depending too much on foreign countries leaves us vulnerable in crises, conflicts, or trade disputes.",
+        "variant_text": {
+          "1": "When we depend on foreign countries for critical medicines, American patients are vulnerable in every crisis. We need domestic supply chains we can count on.",
+          "2": "Depending on foreign countries for critical medicines leaves American families vulnerable when crises hit. We need domestic production we can count on.",
+          "3": "Depending on foreign nations for critical medicines is a security risk. American families shouldn't be vulnerable to foreign supply disruptions during crises or conflicts.",
+          "4": "Foreign medicine dependence is a national security disaster. In crises or conflicts, America can't be at the mercy of countries that don't share our interests.",
+          "5": "When crises hit, foreign medicine dependence means shortages and price spikes that crush working families. We can't be this vulnerable to overseas suppliers.",
+          "6": "Relying on foreign countries for critical medicines leaves American families vulnerable. In a crisis, you can't depend on overseas supply chains to protect your health.",
+          "7": "America must invent and make critical medicines at home. Depending on foreign countries for critical medicines exposes America to supply disruptions in conflicts or trade wars.",
+          "8": "Depending on foreign countries for medicines means trusting supply chains we can't see or verify. In a crisis, that vulnerability puts every American family at risk.",
+          "9": "Depending on foreign countries for critical medicines puts patients at risk. When supply chains fail, individuals lose the ability to make their own treatment decisions.",
+          "10": "Foreign dependence for critical medicines leaves us exposed during crises. Domestic manufacturing ensures reliable supply when communities need treatments most.",
+          "11": "Foreign dependence on critical medicines creates vulnerability that hits hardest when crises come. Domestic manufacturing protects all American patients—especially those with the least margin for error.",
+          "12": "Foreign dependence on medicines hits hardest in crises—and vulnerable communities suffer most from shortages. Domestic manufacturing protects all American families.",
+          "13": "Working families can't afford medicine shortages when crises hit. Foreign dependence is a vulnerability that puts the people who built this country at risk.",
+          "14": "America must invent and make critical medicines at home; depending too much on foreign countries leaves us vulnerable in crises, conflicts, or trade disputes.",
+          "15": "Foreign medicine dependence puts the treatments Americans rely on at risk. In a crisis, supply disruptions could threaten coverage we've counted on for decades.",
+          "16": "Foreign dependence on medicines creates cascading vulnerabilities for global health systems and patients here at home."
+        }
+      },
+      {
+        "item_id": "AL_MSG_3",
+        "control_text": "China is rapidly expanding its ability to develop and manufacture new medicines, and the U.S. risks falling behind a strategic competitor in a vital industry.",
+        "variant_text": {
+          "1": "China is racing to dominate medicine manufacturing while America falls behind. We can't let a strategic competitor control an industry that affects every patient.",
+          "2": "China is rapidly expanding medicine manufacturing while America falls behind. We shouldn't cede this vital industry to a country that doesn't share our standards or values.",
+          "3": "China is rapidly expanding its medicine industry while America risks falling behind. We cannot cede this vital sector to a communist regime that threatens our values.",
+          "4": "China is taking over medicine manufacturing while America falls behind. Globalist policies handed a strategic competitor control over vital industries—and our health.",
+          "5": "China is building medicine factories while American plants close. Corporate offshoring helped China gain ground—now working families pay the price.",
+          "6": "China is rapidly expanding medicine manufacturing while America falls behind. Do we really want communist leaders controlling what families put in their bodies?",
+          "7": "China is aggressively expanding medicine manufacturing and America risks falling behind. This is a strategic competition we cannot afford to lose—the future of biotech is at stake.",
+          "8": "China is expanding medicine production while America falls behind. A regime that hides everything is gaining control over global medicine supply.",
+          "9": "China is rapidly expanding medicine manufacturing while America falls behind. Dependence on an authoritarian regime is the opposite of medical freedom for American patients.",
+          "10": "China is investing heavily in medicine manufacturing and the U.S. is at risk of falling behind. We need to match their commitment to stay competitive in this vital science.",
+          "11": "China is rapidly expanding medicine manufacturing while the U.S. falls behind. We should compete—but as a nation investing in the things that matter most like health care.",
+          "12": "China is expanding medicine manufacturing while America falls behind. This strategic competition matters—for American jobs, global health equity, and our ability to lead with integrity.",
+          "13": "China expands medicine manufacturing while American workers lose ground. A strategic competitor is winning because corporate decisions shipped our jobs overseas.",
+          "14": "China is building medicine manufacturing capacity while America falls behind. We can't build the future of healthcare here if a strategic competitor controls critical supply chains.",
+          "15": "China is rapidly expanding its ability to develop and manufacture new medicines, and the U.S. risks falling behind a strategic competitor in a vital industry.",
+          "16": "China's rapid expansion in medicine manufacturing is a threat. If the U.S. falls behind, American patients and global health systems will suffer."
+        }
+      },
+      {
+        "item_id": "AL_MSG_4",
+        "control_text": "America leads the world in developing and manufacturing new medicines, but leadership can shift quickly. Europe once led this industry and lost ground, and China is now racing to take the lead. The U.S. must treat this as a national priority to stay ahead.",
+        "variant_text": {
+          "1": "America leads in medicine today, but Europe once led too—and lost it. Staying ahead requires treating this industry as a national priority, not assuming leadership is permanent.",
+          "2": "America leads in medicine, but Europe once led and lost ground. Treating this as a national priority keeps production here—closer to the communities it's meant to serve.",
+          "3": "America leads in medicine manufacturing, but leadership isn't guaranteed. Europe once dominated this industry and lost ground. We must make staying ahead a national priority.",
+          "4": "America leads in medicine today, but Europe lost its industry to globalization. Without making this a national priority, the same forces will hand our leadership to China.",
+          "5": "America leads in medicine now, but Europe lost its lead—jobs went elsewhere. If we don't make this a national priority, working families will watch another industry disappear.",
+          "6": "American medicine leadership can slip away—Europe lost ground, China is racing ahead. Families who value self-reliance need leaders who treat this as a national priority.",
+          "7": "Leadership in medicine shifts fast—Europe lost it, China wants it. America must treat biotech dominance as a national priority or watch rivals capture the future.",
+          "8": "America leads in medicine, but Europe once led and lost. If this industry matters enough to be a national priority, it should be made here where Americans have control.",
+          "9": "America leads in medicine, but Europe once led and lost ground. Maintaining leadership here means more options for patients—not fewer choices dictated by foreign suppliers.",
+          "10": "America leads in medicine, but Europe once led and lost ground. China is racing to catch up. Sustained investment in science and manufacturing is a national priority.",
+          "11": "America leads in medicine, but Europe once led and lost ground. Treating this as a national priority means sustained public commitment, not hoping markets alone keep us ahead.",
+          "12": "America leads in medicine, but Europe once led and lost ground. Making this a national priority means good jobs and ensuring leadership benefits all communities, not just shareholders.",
+          "13": "America leads in medicine, but Europe lost that lead when corporations chased cheaper labor. Making this a national priority protects the jobs working families depend on.",
+          "14": "America leads in medicine, but leadership shifts—Europe lost ground, China is racing. National priority means sustained capacity building, not complacency.",
+          "15": "America leads in medicine manufacturing, but Europe once led too and lost it. Treating this as a national priority ensures stable supply for the health care we've built over decades.",
+          "16": "America's medicine leadership strengthens global health systems, but it's not permanent—Europe lost ground. Treating this as a national priority protects worldwide health infrastructure."
+        }
+      },
+      {
+        "item_id": "AL_MSG_5",
+        "control_text": "Inventing and making new medicines here adds hundreds of billions to the U.S. economy—not just through corporate jobs, but through construction, housing, and the businesses that support it.",
+        "variant_text": {
+          "1": "Inventing and making new medicines here adds hundreds of billions to the U.S. economy—not just through corporate jobs, but through construction, housing, and the businesses that support it.",
+          "2": "Medicine manufacturing adds hundreds of billions to the economy—construction, housing, local businesses. Real economic benefits rooted in communities.",
+          "3": "Inventing and making new medicines here adds hundreds of billions to the U.S. economy—not just through corporate jobs, but through construction, housing, and the businesses that support it.",
+          "4": "Domestic medicine manufacturing adds hundreds of billions to our economy—construction, housing, local businesses. Wealth for American communities, not globalist extraction.",
+          "5": "Medicine manufacturing adds hundreds of billions to the economy—construction jobs, housing, local businesses. That's real money for working families, not just corporate balance sheets.",
+          "6": "Making medicines here adds hundreds of billions to our economy—jobs in construction, housing, local businesses. Economic strength for American families.",
+          "7": "Medicine manufacturing adds hundreds of billions to GDP—construction, housing, supporting businesses. This is the economic engine of a biotech-driven future.",
+          "8": "Making medicines here adds hundreds of billions to the economy—construction, housing, local businesses—keeping those benefits in American communities, not sending it overseas.",
+          "9": "Medicine manufacturing adds hundreds of billions to the economy—construction, housing, local businesses. Domestic industry means prosperity and more treatment options closer to home.",
+          "10": "Domestic medicine manufacturing adds hundreds of billions to the economy through construction, housing, and supporting businesses—growth that reaches every type of community.",
+          "11": "Medicine manufacturing adds hundreds of billions to the economy—construction, housing, local businesses. That's collective prosperity worth investing in as a society.",
+          "12": "Inventing and making new medicines here adds hundreds of billions to the U.S. economy—not just through corporate jobs, but through construction, housing, and the businesses that support it.",
+          "13": "Medicine manufacturing adds hundreds of billions to the economy—construction, housing, local businesses. Real economic gains for working communities, not corporate shell games.",
+          "14": "Making medicines here adds hundreds of billions in economic activity—construction, housing, supporting businesses. The capacity-building that drives growth and prosperity.",
+          "15": "Making medicines here adds hundreds of billions in steady economic activity—construction, housing, businesses. Stable growth that supports the health care we depend on.",
+          "16": "Domestic medicine manufacturing generates hundreds of billions in economic activity—the industrial foundation that supports American leadership."
+        }
+      },
+      {
+        "item_id": "AL_MSG_6",
+        "control_text": "Making medicines in America creates good-paying jobs, supports small businesses, and helps transform local communities into vibrant places to live and work—the next generation of American opportunity.",
+        "variant_text": {
+          "1": "Medicine manufacturing creates good-paying jobs, supports small businesses, and transforms local communities—opportunity that gives families real economic choices.",
+          "2": "Making medicines in America creates good-paying jobs, supports small businesses, and transforms local communities—the kind of rooted prosperity that strengthens families.",
+          "3": "Making medicines in America creates good-paying jobs, supports small businesses, and builds vibrant communities—local opportunity rooted in hard work and responsibility.",
+          "4": "Domestic medicine manufacturing means good-paying jobs, small businesses, and transformed communities—real opportunity for American families, not foreign elites.",
+          "5": "Medicine manufacturing means good-paying jobs, thriving small businesses, and transformed communities—local opportunity for working families.",
+          "6": "Making medicines here creates good-paying jobs, supports small businesses, and transforms communities—opportunity for families taking responsibility for their own futures.",
+          "7": "Medicine manufacturing creates good-paying jobs, supports small businesses, and transforms communities into innovation hubs—the next generation of American opportunity.",
+          "8": "Making medicines here creates good-paying jobs, supports small businesses, and transforms communities—local opportunity where families can see what's being built.",
+          "9": "Making medicines in America creates good-paying jobs, supports small businesses, and helps transform local communities into vibrant places to live and work—the next generation of American opportunity.",
+          "10": "Medicine manufacturing creates good-paying jobs and supports small businesses, transforming communities—especially rural areas that need paths to the innovation economy.",
+          "11": "Making medicines in America creates good-paying jobs, supports small businesses, and transforms communities—the kind of shared prosperity that lifts entire regions.",
+          "12": "Medicine manufacturing creates good-paying jobs, supports small businesses, and transforms communities—opportunity that can reach neighborhoods historically left behind.",
+          "13": "Medicine manufacturing means good-paying jobs, small businesses, and transformed communities—the kind of local opportunity working families fought for and deserve.",
+          "14": "Making medicines here creates good-paying jobs, supports small businesses, and transforms communities—the local opportunity that builds healthcare capacity everywhere.",
+          "15": "Making medicines in America creates good-paying jobs, supports small businesses, and builds stable communities—opportunity that supports the benefits we've earned.",
+          "16": "Medicine manufacturing creates good-paying jobs and transforms local communities—sustainable opportunity that strengthens the industrial base we need."
+        }
+      },
+      {
+        "item_id": "AL_MSG_7",
+        "control_text": "The U.S. biopharmaceutical industry is as important to American manufacturing as autos and aerospace—a high-tech sector that produces just as many high-paying, high-skill jobs across the country.",
+        "variant_text": {
+          "1": "The U.S. biopharmaceutical industry is as important to American manufacturing as autos and aerospace—a high-tech sector that produces just as many high-paying, high-skill jobs across the country.",
+          "2": "Biopharmaceutical manufacturing is as important as autos and aerospace—a major industry with high-skill jobs that deserves the same attention we give other vital sectors.",
+          "3": "Medicine manufacturing is as important as autos and aerospace—a pillar of American industry with high-paying, high-skill jobs built on traditional values of reliability and responsibility.",
+          "4": "Medicine manufacturing is as vital as autos and aerospace—high-paying American jobs in an industry we should control, not surrender to foreign interests.",
+          "5": "Medicine manufacturing is as important as autos and aerospace—creating just as many high-paying, high-skill jobs that can help rebuild the American middle class.",
+          "6": "Biopharmaceutical manufacturing is as vital as autos and aerospace—high-skill jobs for Americans who value building something real with their own hands.",
+          "7": "Biopharmaceutical manufacturing is as strategic as autos and aerospace—high-tech jobs in the sector that will define economic competition for the next century.",
+          "8": "The U.S. biopharmaceutical industry is as important to American manufacturing as autos and aerospace—a high-tech sector that produces just as many high-paying, high-skill jobs across the country.",
+          "9": "Biopharmaceutical manufacturing is as important as autos and aerospace—a high-tech sector with good jobs, producing the treatments Americans should be free to choose.",
+          "10": "Biopharmaceutical manufacturing rivals autos and aerospace—high-paying, high-skill jobs that bring scientific innovation to communities across the country.",
+          "11": "Biopharmaceutical manufacturing is just as important as autos and aerospace—a high-tech sector producing just as many jobs while tackling the challenges that really matter.",
+          "12": "Biopharmaceutical manufacturing creates as many jobs as autos and aerospace—high-skill jobs that can reach all communities with fair wages and real opportunity.",
+          "13": "Medicine manufacturing is as important as autos and aerospace—high-paying, high-skill jobs that working people built and deserve to keep in America.",
+          "14": "Medicine manufacturing rivals autos and aerospace—high-paying, high-skill jobs that build the industrial capacity America needs for the future.",
+          "15": "The U.S. biopharmaceutical industry is as important to American manufacturing as autos and aerospace—a high-tech sector that produces just as many high-paying, high-skill jobs across the country.",
+          "16": "Biopharmaceutical manufacturing is as strategic as autos and aerospace—the high-skill industrial base that powers American leadership."
+        }
+      },
+      {
+        "item_id": "AL_MSG_8",
+        "control_text": "Research in American universities—in every state—drives new discoveries, creates thousands of biotech start-ups, and trains the next generation of scientists.",
+        "variant_text": {
+          "1": "Research in American universities—in every state—drives new discoveries, creates thousands of biotech start-ups, and trains the next generation of scientists.",
+          "2": "Research at American universities in every state drives new discoveries, creates biotech startups, and trains scientists—homegrown innovation serving American communities.",
+          "3": "American universities in every state drive discoveries, create biotech startups, and train scientists—research excellence rooted in the academic traditions that built our nation.",
+          "4": "American universities drive discoveries and train scientists—research that should be controlled by Americans.",
+          "5": "Research in American universities—in every state—drives new discoveries, creates thousands of biotech start-ups, and trains the next generation of scientists.",
+          "6": "Research in American universities—in every state—drives new discoveries, creates thousands of biotech start-ups, and trains the next generation of scientists.",
+          "7": "Universities in every state drive discoveries, launch thousands of startups, and train scientists—the innovation engine powering America's biotech dominance.",
+          "8": "University research creates discoveries and trains scientists—work that is best done closer to home.",
+          "9": "Research in American universities—in every state—drives new discoveries, creates thousands of biotech start-ups, and trains the next generation of scientists.",
+          "10": "Research at universities in every state drives discoveries, creates thousands of startups, and trains scientists—the pipeline that brings innovation to communities nationwide.",
+          "11": "Research at American universities in every state drives discoveries, creates startups, and trains scientists—public institutions generating innovation that benefits the whole country.",
+          "12": "Research in American universities—in every state—drives new discoveries, creates thousands of biotech start-ups, and trains the next generation of scientists.",
+          "13": "Research in American universities—in every state—drives new discoveries, creates thousands of biotech start-ups, and trains the next generation of scientists.",
+          "14": "Research in American universities—in every state—drives new discoveries, creates thousands of biotech start-ups, and trains the next generation of scientists.",
+          "15": "American universities drive steady medical discoveries, create startups, and train scientists—research that improves treatments Americans have relied on for generations.",
+          "16": "American university research drives discoveries and trains scientists who lead across the globe."
+        }
+      },
+      {
+        "item_id": "AL_MSG_9",
+        "control_text": "Medicines are a form of advanced, high-tech manufacturing that America must prioritize if it wants to remain a competitive, innovation-driven economy.",
+        "variant_text": {
+          "1": "Medicines are advanced, high-tech manufacturing America must prioritize—a competitive industry that works best when innovation and consumer choice drive the market.",
+          "2": "Medicines are advanced, high-tech manufacturing America must prioritize to remain competitive—an industry too important to let drift offshore.",
+          "3": "Medicines are high-tech manufacturing America must prioritize to remain competitive—advanced industry built on the skill and work ethic that define American excellence.",
+          "4": "Medicines are a form of advanced, high-tech manufacturing that America must prioritize if it wants to remain a competitive, innovation-driven economy.",
+          "5": "Medicines are high-tech manufacturing America must prioritize—because an innovation economy should lift working families, not just reward shareholders and foreign countries.",
+          "6": "Medicines are made using advanced manufacturing and the high-skill jobs America must prioritize to stay competitive.",
+          "7": "Medicines are advanced, high-tech manufacturing America must absolutely prioritize—the innovation frontier that will define economic competition for the rest of the century.",
+          "8": "Medicines are high-tech manufacturing—and if America must prioritize this industry to stay competitive, then make it here close to home.",
+          "9": "Medicines are advanced, high-tech manufacturing America must prioritize. A strong domestic industry gives patients more options—not dependence on distant suppliers.",
+          "10": "Medicines are advanced, high-tech manufacturing America must prioritize—the kind of innovation-driven industry that keeps us competitive and brings science to patients.",
+          "11": "Medicines are advanced, high-tech manufacturing America must prioritize. A competitive innovation economy requires public investment in the industries that matter most.",
+          "12": "Medicines are advanced manufacturing America must prioritize so that a competitive innovation economy creates opportunity for all communities, not just tech hubs.",
+          "13": "Medicines are high-tech manufacturing America must prioritize—advanced jobs that working people deserve, kept here rather than offshored to competitors.",
+          "14": "Medicines are high-tech manufacturing America must prioritize—advanced capacity that keeps us competitive and builds the innovation economy we need.",
+          "15": "Medicines are a form of advanced, high-tech manufacturing that America must prioritize if it wants to remain a competitive, innovation-driven economy.",
+          "16": "Medicines are advanced manufacturing America must prioritize—the high-tech industrial base that powers both economic competitiveness and global health leadership."
+        }
+      },
+      {
+        "item_id": "AL_MSG_10",
+        "control_text": "When medicines are made in America, U.S. patients are more likely to get early and reliable access to the newest treatments and cures.",
+        "variant_text": {
+          "1": "When medicines are made in America, U.S. patients get early, reliable access to the newest treatments—putting consumers first, not foreign supply chains.",
+          "2": "When medicines are made in America, U.S. patients get earlier, more reliable access to new treatments—produced closer to the people who need them.",
+          "3": "American-made medicines mean U.S. patients—American families—get early and reliable access to the newest treatments and cures before anyone else.",
+          "4": "When medicines are made in America, U.S. patients get early access—keeping American patients first.",
+          "5": "When medicines are made here, American patients get early, reliable access—working families first, not wealthy foreigners or corporate-connected elites.",
+          "6": "American-made medicines mean U.S. patients get early, reliable access to treatments—putting American patients and families first.",
+          "7": "Domestic manufacturing means American patients access breakthrough treatments first—the innovation advantage that comes from controlling the biotech supply chain.",
+          "8": "When medicines are made here, American patients have early access and visibility into the newest treatments.",
+          "9": "When medicines are made in America, patients get earlier, more reliable access to new treatments—real choices available when you need them, not controlled by foreign supply chains.",
+          "10": "Domestic medicine manufacturing means U.S. patients get early, reliable access to the newest treatments—scientific breakthroughs reaching patients when they need them.",
+          "11": "When medicines are made in America, U.S. patients are more likely to get early, reliable access to the newest treatments—a direct benefit of domestic production.",
+          "12": "American-made medicines should mean early, reliable access for all U.S. patients—especially underserved communities that have waited too long for equal access.",
+          "13": "When medicines are made here, American patients—working families who built this country—get early, reliable access to the newest treatments.",
+          "14": "When medicines are made in America, U.S. patients are more likely to get early and reliable access to the newest treatments and cures.",
+          "15": "Domestic medicine manufacturing means the treatments Americans depend on are available early and reliably—protecting access we've counted on for decades.",
+          "16": "American-made medicines ensure U.S. patients get reliable access while strengthening global supply chains—domestic production serving both national and international health."
+        }
+      },
+      {
+        "item_id": "AL_MSG_11",
+        "control_text": "Medicines will always be a major global industry, and policymakers should ensure that the jobs, investment, and economic benefits stay in the United States.",
+        "variant_text": {
+          "1": "Medicines are a global industry—policymakers must ensure jobs, investment, and benefits stay in America, where competitive markets can serve consumers.",
+          "2": "Medicines are a major global industry. Policymakers should ensure jobs, investment, and economic benefits stay here—strengthening American communities, not foreign economies.",
+          "3": "Medicine is a major global industry. American policymakers must ensure jobs, investment, and economic benefits stay here—protecting American families and national interests.",
+          "4": "Medicine is a global industry—but policymakers must keep jobs, investment, and benefits in America. Globalists shouldn't profit while our communities are hollowed out.",
+          "5": "Medicine is a huge global industry—policymakers must fight to keep jobs, investment, and benefits here for working families, not let them flow to foreign shareholders.",
+          "6": "Medicines are a global industry. Policymakers must ensure jobs and benefits stay in America—economic strength for families who value self-reliance over foreign dependence.",
+          "7": "Medicines are a global industry, and policymakers must ensure America captures the jobs, investment, and economic benefits—or watch rivals dominate the biotech century.",
+          "8": "Medicine is a global industry—at minimum, policymakers should keep jobs and money here in America, where citizens can benefit.",
+          "9": "Medicines are a major global industry. Keeping jobs and investment in America means a domestic industry that gives patients options—not dependence on countries that don't respect individual freedom.",
+          "10": "Medicines are a global industry, and policymakers must keep jobs, investment, and benefits in America—supporting communities and the science infrastructure we've built.",
+          "11": "Medicines are a major global industry. Policymakers should ensure jobs, investment, and economic benefits stay in the United States—building national capacity that serves everyone.",
+          "12": "Medicines are a global industry—but policymakers must ensure those jobs and benefits stay in America and reach all communities.",
+          "13": "Medicine is a global industry. Policymakers must ensure jobs, investment, and benefits stay here—protecting what American workers built.",
+          "14": "Medicine is a major global industry. Policymakers must keep jobs, investment, and benefits in America—building the capacity for healthcare abundance.",
+          "15": "Medicines are a major global industry. Policymakers must keep jobs and benefits in America—economic stability that supports the care we depend on.",
+          "16": "Medicines are a global industry—American policymakers must keep jobs and investment here while strengthening the institutions that serve worldwide health."
+        }
+      }
+    ]
+  },
+  "post_test": {
+    "_note": "Must mirror pre_test items exactly. Platform enforces identical item order to pre-test — no shuffling on post.",
+    "questions": [
+      {
+        "var": "AL_POST",
+        "component": "STYLE.BUTTON.CARD.SHUFFLE",
+        "question_text": "Now that you have read more on the topic, how important is it for...",
+        "scale_points": 7,
+        "options": [
+          "Not at all Important",
+          "Unimportant",
+          "Somewhat Unimportant",
+          "Neither/Neutral",
+          "Somewhat Important",
+          "Important",
+          "Very Important"
+        ],
+        "shuffle": false,
+        "items": [
+          {
+            "var": "AL_POST_r1",
+            "text": "New medicines used by American patients are invented and manufactured in the United States"
+          },
+          {
+            "var": "AL_POST_r2",
+            "text": "Congress to support policies that protect America's leadership in biopharmaceutical innovation and manufacturing"
+          }
+        ]
+      },
+      {
+        "var": "AL_POST_RANK",
+        "component": "STYLE.RANKSORT",
+        "question_text": "Which industries do you think are most important for America to be viewed as a global leader? Rank these industries in order of importance.",
+        "optional": false,
+        "shuffle": false,
+        "min_ranks": 5,
+        "rank_positions": [
+          "Most Important",
+          "2nd most important",
+          "3rd most important",
+          "4th most important",
+          "Least important"
+        ],
+        "rank_values": [
+          5,
+          4,
+          3,
+          2,
+          1
+        ],
+        "items": [
+          {
+            "var": "AL_POST_RANK_r1",
+            "text": "Oil & Gas"
+          },
+          {
+            "var": "AL_POST_RANK_r2",
+            "text": "Automotive Manufacturing"
+          },
+          {
+            "var": "AL_POST_RANK_r3",
+            "text": "Artificial Intelligence / Tech"
+          },
+          {
+            "var": "AL_POST_RANK_r4",
+            "text": "Biopharmaceuticals"
+          },
+          {
+            "var": "AL_POST_RANK_r5",
+            "text": "Aerospace"
+          }
+        ]
+      },
+      {
+        "var": "CORPFAV_POST",
+        "component": "STYLE.MATRIX",
+        "scale": [
+          0,
+          10
+        ],
+        "left_anchor": "Very Unfavorable (0)",
+        "right_anchor": "Very Favorable (10)",
+        "has_not_familiar": true,
+        "not_familiar_value": 99,
+        "shuffle": true,
+        "question_text": "Rate your overall impressions of each of the following entities.",
+        "items": [
+          {
+            "var": "CORPFAV_POST_r1",
+            "text": "Biopharmaceutical companies"
+          },
+          {
+            "var": "CORPFAV_POST_r7",
+            "text": "Automobile manufacturers"
+          },
+          {
+            "var": "CORPFAV_POST_r8",
+            "text": "Oil and gas companies"
+          },
+          {
+            "var": "CORPFAV_POST_r11",
+            "text": "Artificial Intelligence / Technology companies"
+          },
+          {
+            "var": "CORPFAV_POST_r15",
+            "text": "Pfizer"
+          },
+          {
+            "var": "CORPFAV_POST_r16",
+            "text": "Bristol Myers Squibb (BMS)"
+          },
+          {
+            "var": "CORPFAV_POST_r17",
+            "text": "Amgen"
+          },
+          {
+            "var": "CORPFAV_POST_r18",
+            "text": "Eli Lilly"
+          },
+          {
+            "var": "CORPFAV_POST_r19",
+            "text": "Novartis"
+          },
+          {
+            "var": "CORPFAV_POST_r20",
+            "text": "Merck"
+          },
+          {
+            "var": "CORPFAV_POST_r21",
+            "text": "Johnson & Johnson"
+          }
+        ]
+      }
+    ]
+  },
+  "mob_battery": {
+    "enabled": true,
+    "var": "AL_MOB",
+    "component": "STYLE.BUTTON.CARD.SHUFFLE",
+    "question_text": "The following statements explore how you feel about taking action on this issue. For each one, please indicate how much you agree or disagree.",
+    "scale_points": 7,
+    "options": [
+      "Strongly DISAGREE",
+      "Disagree",
+      "Somewhat disagree",
+      "Neither agree nor disagree",
+      "Somewhat Agree",
+      "Agree",
+      "Strongly AGREE"
+    ],
+    "shuffle": true,
+    "items": [
+      {
+        "var": "AL_MOB_r1",
+        "text": "Working with others, people like me can have an impact influencing policymakers to support U.S. leadership in biopharmaceutical innovation and manufacturing."
+      },
+      {
+        "var": "AL_MOB_r2",
+        "text": "I know what steps to take to make my voice heard on issues like U.S. medicine manufacturing and innovation."
+      },
+      {
+        "var": "AL_MOB_r3",
+        "text": "This issue raises important questions of right and wrong for me personally."
+      },
+      {
+        "var": "AL_MOB_r4",
+        "text": "It worries me to think about how decisions made today could affect the future of health care and America's standing in the world."
+      },
+      {
+        "var": "AL_MOB_r5",
+        "text": "If I asked, many of my friends or colleagues would be willing to join me in supporting stronger protections for U.S. medicine manufacturing and innovation."
+      }
+    ]
+  },
+  "adv_battery": {
+    "enabled": true,
+    "questions": [
+      {
+        "var": "AL_ADV_P1",
+        "component": "STYLE.BUTTON.HORIZONTAL",
+        "question_text": "Thinking about the next 30 days, how likely are you to take any action related to calling on policymakers to strengthen U.S. leadership in biopharmaceutical innovation and manufacturing (for example, sharing social media content, signing something, contacting someone, or attending a meeting)?",
+        "options": [
+          "Definitely would not",
+          "Probably would not",
+          "Probably would",
+          "Definitely would",
+          "Not sure"
+        ]
+      },
+      {
+        "var": "AL_ADV_P2",
+        "component": "STYLE.BUTTON.HORIZONTAL",
+        "question_text": "Compared to other issues you care about, how motivating is this issue for you right now?",
+        "options": [
+          "Much less motivating",
+          "Somewhat less motivating",
+          "About the same",
+          "Somewhat more motivating",
+          "Much more motivating"
+        ]
+      },
+      {
+        "var": "AL_ADV_P2n",
+        "component": "STYLE.BUTTON.HORIZONTAL",
+        "question_text": "If your time or attention were limited this month, would this issue be one you actually focus on?",
+        "options": [
+          "Definitely would not",
+          "Probably would not",
+          "Probably would",
+          "Definitely would",
+          "Not sure"
+        ]
+      }
+    ]
+  },
+  "roi_config": {
+    "study_code": "AL",
+    "common_scale": 7,
+    "_note": "pre_align and post_align are weighted composites on a common 1-7 scale. Each item specifies its normalization transform. The platform applies transforms before computing the composite. ALIGN_MOVE = post_align - pre_align.",
+    "pre_align": {
+      "index_var": "AL_PRE_ALIGN",
+      "items": [
+        {
+          "var": "AL_PRE_r1",
+          "transform": "none",
+          "reversed": false,
+          "weight": 33,
+          "_note": "Raw 1-7 — no transform needed"
+        },
+        {
+          "var": "AL_PRE_r2",
+          "transform": "none",
+          "reversed": false,
+          "weight": 33
+        },
+        {
+          "var": "AL_PRE_RANK_r4",
+          "transform": "rank_to_7pt",
+          "transform_params": {
+            "rank_min": 1,
+            "rank_max": 5
+          },
+          "reversed": false,
+          "weight": 34,
+          "_note": "Biopharmaceuticals rank position. Formula: ((val - 1) / (rank_max - 1)) * 6 + 1"
+        }
+      ]
+    },
+    "post_align": {
+      "index_var": "AL_POST_ALIGN",
+      "items": [
+        {
+          "var": "AL_POST_r1",
+          "transform": "none",
+          "reversed": false,
+          "weight": 33
+        },
+        {
+          "var": "AL_POST_r2",
+          "transform": "none",
+          "reversed": false,
+          "weight": 33
+        },
+        {
+          "var": "AL_POST_RANK_r4",
+          "transform": "rank_to_7pt",
+          "transform_params": {
+            "rank_min": 1,
+            "rank_max": 5
+          },
+          "reversed": false,
+          "weight": 34
+        }
+      ]
+    },
+    "critics_vars": [],
+    "activation": {
+      "enabled": true,
+      "index_var": "AL_ARS",
+      "items": [
+        {
+          "var": "AL_ADV_P1",
+          "transform": "adv_to_unit",
+          "transform_params": {
+            "scale": 4,
+            "not_sure_value": 5,
+            "not_sure_score": 0.33
+          },
+          "weight": 0.4
+        },
+        {
+          "var": "AL_ADV_P2",
+          "transform": "adv_to_unit",
+          "transform_params": {
+            "scale": 5
+          },
+          "weight": 0.3
+        },
+        {
+          "var": "AL_ADV_P2n",
+          "transform": "adv_to_unit",
+          "transform_params": {
+            "scale": 4,
+            "not_sure_value": 5,
+            "not_sure_score": 0.33
+          },
+          "weight": 0.3
+        }
+      ],
+      "_note": "ARS = weighted sum of normalized items. ARS -> ARS_adj (penalty/boost per BCS) -> ACTIVATION = ARS_adj * 15 (0-15 pts)."
+    },
+    "split_var": "Xrandom4",
+    "split_values": {
+      "persona_variant": "r1",
+      "control": "r2"
+    }
+  },
+  "bibd_specs": {
+    "AL_MSG_MAXDIFF": {
+      "n_items": 11,
+      "items_per_task": 4,
+      "n_tasks": 11,
+      "bibd_file": "AL_MSG_Design.dat",
+      "_note": "Design file generated by analyst before fielding. Quota version assignment handled by DQMA layer."
+    }
+  },
+  "bespoke_questions": {
+    "_note": "Study-specific questions that don't fit standard component patterns. Each entry specifies where in the study block it appears using a named position anchor. The platform inserts it at that point in the page flow.",
+    "_position_anchors": [
+      "after_inf360",
+      "after_pre_test",
+      "after_investment_stimulus",
+      "after_msg_maxdiff",
+      "after_post_test",
+      "after_phrma",
+      "after_mob",
+      "after_adv"
+    ],
+    "questions": [
+      {
+        "position": "after_post_test",
+        "var": "PHRMA01",
+        "component": "STYLE.RADIO.VERTICAL",
+        "question_text": "In your view, which priority should be more important for policymakers?",
+        "shuffle": true,
+        "options": [
+          "Lowering drug prices through price controls and other related policies.",
+          "Creating an environment where pharmaceutical companies can continue innovating to come up with new cures."
+        ]
+      },
+      {
+        "position": "after_post_test",
+        "var": "PHRMA02",
+        "component": "STYLE.RADIO.VERTICAL",
+        "question_text": "Who do you think is doing more to make the U.S. the world leader in pharmaceutical innovation?",
+        "shuffle": true,
+        "options": [
+          "The U.S. Government",
+          "The pharmaceutical industry"
+        ]
+      },
+      {
+        "position": "after_post_test",
+        "var": "PHRMA03",
+        "component": "STYLE.RADIO.VERTICAL",
+        "question_text": "Which statement comes closer to your view?",
+        "shuffle": true,
+        "options": [
+          "Government policy is helping American pharmaceutical leadership.",
+          "Government policy is hurting American pharmaceutical leadership."
+        ]
+      },
+      {
+        "position": "after_post_test",
+        "var": "PHRMA04",
+        "component": "STYLE.RADIO.VERTICAL",
+        "question_text": "Which of the following two statements comes closer to your view?",
+        "shuffle": true,
+        "options": [
+          "It's vital for the U.S. that we are the global leader in pharmaceutical innovation because it means we get more access to medicines and aren't reliant on other countries.",
+          "It doesn't matter that much if the U.S. is the global leader in pharmaceutical innovation because we can still access medicines developed in other countries."
+        ]
+      }
+    ]
+  },
+  "_changelog": [
+    "v2.0: Initial Layer 2 separation — removed design tokens, component registry, platform constants",
+    "v2.1: roi_config rewritten as index definitions (transform + weight), not question types. Quota architecture removed — belongs to DQMA. Bespoke questions hook added with position anchors.",
+    "v2.2: PhRMA module removed as standalone section — moved to bespoke_questions with position=after_post_test.",
+    "v2.3: Removed has_investment_variable and has_mob_battery flags. Presence of the section in config is sufficient signal. Platform checks for non-empty investment_variable.variants and mob_battery.items.",
+    "v2.4: filter_value corrected to string 'r5' (was integer 5). AL_PRE_RANK and AL_POST_RANK optional=False. within_study_quotas section added with random_split (Xrandom4) and eligibility_gated (XINVESTVAR) definitions.",
+    "v2.5: Removed filter_var/filter_value (Decipher artifacts). Added eligibility.rules section with φ_j weighting per Spec Section 6.4. AL has no hard exclusion — all respondents φ_j=3 (primary match). Removed split_design.enabled flag.",
+    "v2.6: Added quota_targets section. AL targets=[]. Schema documented with soft and hard enforcement types, target_share vs target_n distinction, penalty_floor, tolerance. Tracked in within_study_quota_state via quota_id as split_id."
+  ],
+  "within_study_quotas": {
+    "_note": "Within-study quota splits. Managed by survey platform, not DQMA. Two types: random_split (simple balancing at entry) and eligibility_gated (assignment after eligibility-determining question, requires quota tracking per variant cell).",
+    "splits": [
+      {
+        "split_id": "XRANDOM4",
+        "type": "random_split",
+        "var": "Xrandom4",
+        "assignment": "at_entry",
+        "cells": [
+          {
+            "value": "r1",
+            "label": "Persona variant",
+            "target_share": 0.5
+          },
+          {
+            "value": "r2",
+            "label": "Control",
+            "target_share": 0.5
+          }
+        ],
+        "_note": "Assigned at study entry. No eligibility dependency. Platform balances toward 50/50 within each segment × study cell."
+      },
+      {
+        "split_id": "XINVESTVAR",
+        "type": "eligibility_gated",
+        "var": "XINVESTVAR",
+        "assignment": "after_question",
+        "eligibility_question": "AL_CORP_FAV",
+        "eligibility_rule": "respondent is eligible for variant r{n} if AL_CORP_FAV_r{company_row} != 99 (not unfamiliar). Variant r1 (industry control) is always eligible.",
+        "target_share": "equal",
+        "cells": [
+          {
+            "value": "r1",
+            "label": "Industry control",
+            "company_row": null,
+            "always_eligible": true
+          },
+          {
+            "value": "r2",
+            "label": "Pfizer",
+            "company_row": "AL_CORP_FAV_r15",
+            "always_eligible": false
+          },
+          {
+            "value": "r3",
+            "label": "BMS",
+            "company_row": "AL_CORP_FAV_r16",
+            "always_eligible": false
+          },
+          {
+            "value": "r4",
+            "label": "Amgen",
+            "company_row": "AL_CORP_FAV_r17",
+            "always_eligible": false
+          },
+          {
+            "value": "r5",
+            "label": "Lilly",
+            "company_row": "AL_CORP_FAV_r18",
+            "always_eligible": false
+          },
+          {
+            "value": "r6",
+            "label": "Novartis",
+            "company_row": "AL_CORP_FAV_r19",
+            "always_eligible": false
+          },
+          {
+            "value": "r7",
+            "label": "Merck",
+            "company_row": "AL_CORP_FAV_r20",
+            "always_eligible": false
+          }
+        ],
+        "assignment_logic": "From the respondent's eligible variants, assign to the variant with the lowest current completion count (least-filled cell first). If tie, random selection among tied cells.",
+        "quota_table": "within_study_quota_state",
+        "_note": "Assignment happens after AL_CORP_FAV is collected. Platform builds eligible set from familiarity responses, then routes to least-filled eligible cell."
+      }
+    ]
+  },
+  "eligibility": {
+    "_note": "Eligibility rules evaluated per respondent to produce φ_j(r). Evaluated in order — first match wins. result: 0=not_eligible, 2=secondary_match, 3=primary_match, 4=strong_primary. φ_j feeds directly into routing score as study_weight. Spec Section 6.4.",
+    "rules": [
+      {
+        "var": "*",
+        "op": "default",
+        "result": 3,
+        "_note": "AL has no hard eligibility screen. All screened respondents are primary match. Compare to PREG: PR1=1 → result=4, PR1=2-3 → result=3, else → result=0."
+      }
+    ]
+  },
+  "quota_targets": {
+    "_schema_note": "Defines pre-routing quota targets. Two enforcement types: 'soft' (routing score penalty when cell exceeds tolerance) and 'hard' (cell generates result=0 eligibility rule when target_n is reached). Variables must appear in pre_routing_questions so values are in screener_data before route_respondent() is called. Tracked in within_study_quota_state table using quota_id as split_id. AL has no quota targets — pure ROI-optimized routing.",
+    "_soft_schema": {
+      "quota_id": "string — unique identifier, used as split_id in within_study_quota_state",
+      "var": "string — screener_data key this quota tracks",
+      "source": "pre_routing — variable must be in screener_data at routing time",
+      "enforcement": "soft",
+      "penalty_floor": "float 0-1 — minimum routing score multiplier when cell is over tolerance",
+      "cells": [
+        {
+          "value": "int or string — response value that identifies this cell",
+          "label": "string — human readable label",
+          "target_share": "float 0-1 — desired proportion of total completes",
+          "tolerance": "float — how far over target_share before penalty activates"
+        }
+      ]
+    },
+    "_hard_schema": {
+      "quota_id": "string",
+      "var": "string",
+      "source": "pre_routing",
+      "enforcement": "hard",
+      "cells": [
+        {
+          "value": "int or string",
+          "label": "string",
+          "target_n": "int — absolute n cap; when reached, result=0 injected into eligibility"
+        }
+      ]
+    },
+    "_examples": {
+      "disease_state_hard": {
+        "quota_id": "QDISEASE",
+        "var": "disease_state",
+        "source": "pre_routing",
+        "enforcement": "hard",
+        "cells": [
+          {
+            "value": 1,
+            "label": "Diagnosed",
+            "target_n": 200
+          },
+          {
+            "value": 2,
+            "label": "Undiagnosed",
+            "target_n": 150
+          },
+          {
+            "value": 3,
+            "label": "Caregiver only",
+            "target_n": 100
+          }
+        ]
+      },
+      "treatment_regimen_soft": {
+        "quota_id": "QREGIMEN",
+        "var": "treatment_regimen",
+        "source": "pre_routing",
+        "enforcement": "soft",
+        "penalty_floor": 0.8,
+        "cells": [
+          {
+            "value": 1,
+            "label": "Biologic",
+            "target_share": 0.4,
+            "tolerance": 0.1
+          },
+          {
+            "value": 2,
+            "label": "Small molecule",
+            "target_share": 0.35,
+            "tolerance": 0.1
+          },
+          {
+            "value": 3,
+            "label": "Untreated",
+            "target_share": 0.25,
+            "tolerance": 0.1
+          }
+        ]
+      }
+    },
+    "targets": []
+  }
+}
