@@ -14,11 +14,23 @@ Environment variables to set in Vercel dashboard:
 
 import sys
 import os
+import importlib.util
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(__file__)), 'dqma'))
+# Set up paths
+root = os.path.dirname(os.path.dirname(__file__))
+platform_dir = os.path.join(root, 'platform')
+dqma_dir = os.path.join(root, 'dqma')
 
-os.environ.setdefault("NORMS_DB_PATH",  "/var/task/prism_norms.db")
-os.environ.setdefault("CONFIGS_DIR",    "/var/task/configs")
+sys.path.insert(0, root)
+sys.path.insert(0, dqma_dir)
+sys.path.insert(0, platform_dir)
 
-from platform.main import app
+os.environ.setdefault("NORMS_DB_PATH", os.path.join(root, "prism_norms.db"))
+os.environ.setdefault("CONFIGS_DIR", os.path.join(root, "configs"))
+
+# Import main.py directly by file path to avoid conflict with stdlib 'platform'
+spec = importlib.util.spec_from_file_location("prism_main", os.path.join(platform_dir, "main.py"))
+prism_main = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(prism_main)
+
+app = prism_main.app
