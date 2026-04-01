@@ -29,7 +29,13 @@ from fastapi import FastAPI, Request, Depends, HTTPException, Query
 from fastapi.responses import JSONResponse, RedirectResponse, StreamingResponse
 from pydantic import BaseModel
 
-sys.path.insert(0, '/home/claude/dqma')
+import os as _os
+_here = _os.path.dirname(_os.path.abspath(__file__))
+_root = _os.path.dirname(_here)
+if _here not in sys.path:
+    sys.path.insert(0, _here)
+if _os.path.join(_root, 'dqma') not in sys.path:
+    sys.path.insert(0, _os.path.join(_root, 'dqma'))
 from dqma import (
     route_respondent, record_exit, rebalance as dqma_rebalance,
     initialize_study, evaluate_eligibility,
