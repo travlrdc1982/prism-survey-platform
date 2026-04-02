@@ -176,11 +176,23 @@ def run_test(target_seg: int, label: str):
         print(f"    {item_id:8s} (item {item_num:>2d}): BW={bw:+2d}  "
               f"centroid={centroid_val:+.3f}  {bar_neg}{bar_pos}")
 
-    # Step 3: Convert to raw responses
+    # Step 3: Convert to raw responses and compute z-scores
     raw_responses = bw_scores_to_raw_responses(bw_scores, ITEM_MAP, ITEM_PARAMS)
-    print(f"\n  STEP 3: Raw responses for /survey/typing")
-    for item_id in sorted(raw_responses):
-        print(f"    {item_id:8s} = {raw_responses[item_id]:+.1f}")
+    print(f"\n  STEP 3: Raw B-W scores → z-scored values (same transform as typing_tool.py)")
+    print(f"    {'item_id':8s}  {'BW':>4s}  {'μ':>7s}  {'σ':>6s}  {'z-score':>8s}  {'centroid':>9s}  {'gap':>6s}")
+    print(f"    {'─'*8}  {'─'*4}  {'─'*7}  {'─'*6}  {'─'*8}  {'─'*9}  {'─'*6}")
+    target_centroid = CENTROIDS[target_seg]
+    for item_num in sorted(bw_scores):
+        item_id = ITEM_MAP[item_num]
+        raw = raw_responses[item_id]
+        mu = ITEM_PARAMS[item_id]["mu"]
+        sigma = ITEM_PARAMS[item_id]["sigma"]
+        # Clamp to scale range before z-scoring (same as typing_tool.py line 252)
+        clamped = max(-4.0, min(4.0, raw))
+        z = (clamped - mu) / sigma if sigma > 0 else 0.0
+        centroid_val = target_centroid.get(item_id, 0)
+        gap = z - centroid_val
+        print(f"    {item_id:8s}  {raw:+4.0f}  {mu:+7.3f}  {sigma:6.3f}  {z:+8.4f}  {centroid_val:+9.4f}  {gap:+6.2f}")
 
     # Step 4: Hit the live API
     print(f"\n  STEP 4: API call chain")
