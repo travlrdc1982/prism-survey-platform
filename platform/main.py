@@ -332,6 +332,20 @@ async def submit_typing(
         all_probs       = result.all_probs,
     )
 
+    # Store D² distances and second-best segment in session_data
+    sorted_segs = sorted(result.all_probs.items(), key=lambda x: x[1], reverse=True)
+    xseg_final_2 = sorted_segs[1][0] if len(sorted_segs) > 1 else None
+    session.record_responses("typing_diagnostics", {
+        "d2_values":    {str(k): round(v, 4) for k, v in result.d2_values.items()},
+        "all_probs":    {str(k): round(v, 6) for k, v in result.all_probs.items()},
+        "xseg_final_1": result.segment_id,
+        "xseg_final_2": xseg_final_2,
+        "seg_probability": round(result.seg_probability, 6),
+        "seg_gap":      round(result.seg_gap, 6),
+        "seg_entropy":  round(result.seg_entropy, 6),
+        "party_block":  result.party_block,
+    })
+
     logger.info(
         f"Typed: resp_id={payload.resp_id} "
         f"seg={result.segment_id} P={result.seg_probability:.3f} "
@@ -417,10 +431,12 @@ async def submit_typing(
         "resp_id":         payload.resp_id,
         "study_code":      assigned_study,
         "segment_id":      result.segment_id,
+        "xseg_final_2":    xseg_final_2,
         "seg_probability":  round(result.seg_probability, 4),
         "seg_gap":          round(result.seg_gap, 4),
         "seg_entropy":      round(result.seg_entropy, 4),
         "all_probs":       {str(k): round(v, 4) for k, v in result.all_probs.items()},
+        "d2_values":       {str(k): round(v, 4) for k, v in result.d2_values.items()},
         "party_block":     result.party_block,
         "xrandom4":        xrandom4,
         "xinvestvar":      xinvestvar,
