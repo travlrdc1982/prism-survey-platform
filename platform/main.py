@@ -641,6 +641,7 @@ async def admin_export(
 
 
 
+@app.get("/admin/rebalance/{study_code}")
 async def admin_rebalance(
     study_code: str,
     db=Depends(get_db),
@@ -688,35 +689,6 @@ async def admin_initialize(
     }
 
 
-@app.get("/admin/export/{study_code}")
-async def admin_export(
-    study_code: str,
-    db=Depends(get_db),
-):
-    """
-    Export study data as SPSS .sav file. Completes only.
-    Returns file download — open directly in browser or wget.
-
-    Usage:
-        curl -o AL_export.sav http://host/admin/export/AL
-    """
-    from export import export_spss
-
-    study_config = load_study_config(study_code)
-
-    sav_bytes = export_spss(
-        conn         = db,
-        study_code   = study_code,
-        study_config = study_config,
-    )
-
-    filename = f"{study_code}_{datetime.now().strftime('%Y%m%d')}.sav"
-
-    return StreamingResponse(
-        io.BytesIO(sav_bytes),
-        media_type  = "application/octet-stream",
-        headers     = {"Content-Disposition": f"attachment; filename={filename}"},
-    )
 
 def _build_redirect_url(study_config: dict, redirect_type: str, psid: str) -> str:
     """Build Dynata redirect URL with psid token substitution."""

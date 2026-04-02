@@ -980,8 +980,8 @@ def rebalance(conn, study_code: str) -> dict:
             roi_effs[seg_id] = effective_roi(
                 C             = row['C'],
                 roi_mean      = agg.get('roi_mean'),
-                persuasion_n  = agg.get('persuasion_n', 0) or 0,
-                coalition_n   = agg.get('coalition_n',  0) or 0,
+                persuasion_n  = agg.get('movement_n',  0) or 0,
+                coalition_n   = agg.get('position_n',  0) or 0,
                 activation_n  = agg.get('activation_n', 0) or 0,
                 influence_n   = agg.get('influence_n',  0) or 0,
                 kappa         = kappas[seg_id],
