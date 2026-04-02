@@ -414,14 +414,19 @@ async def submit_typing(
     )
 
     return {
-        "resp_id":      payload.resp_id,
-        "study_code":   assigned_study,
-        "segment_id":   result.segment_id,
-        "xrandom4":     xrandom4,
-        "xinvestvar":   xinvestvar,
-        "msg_version":  msg_version,
-        "next":         "study",
-        "status":       "ok",
+        "resp_id":         payload.resp_id,
+        "study_code":      assigned_study,
+        "segment_id":      result.segment_id,
+        "seg_probability":  round(result.seg_probability, 4),
+        "seg_gap":          round(result.seg_gap, 4),
+        "seg_entropy":      round(result.seg_entropy, 4),
+        "all_probs":       {str(k): round(v, 4) for k, v in result.all_probs.items()},
+        "party_block":     result.party_block,
+        "xrandom4":        xrandom4,
+        "xinvestvar":      xinvestvar,
+        "msg_version":     msg_version,
+        "next":            "study",
+        "status":          "ok",
     }
 
 

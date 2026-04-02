@@ -223,11 +223,24 @@ print(f"\n{'─'*70}")
 print(f"TYPING (GOP battery):")
 for k, v in sorted(gop_responses.items()):
     print(f"  {k:20s} = {v:+.1f}")
-print(f"  → segment_id  = {t['segment_id']}")
-print(f"  → study_code  = {t['study_code']}")
-print(f"  → xrandom4    = {t['xrandom4']}")
-print(f"  → xinvestvar   = {t['xinvestvar']}")
-print(f"  → msg_version  = {t['msg_version']}")
+print(f"\n  ASSIGNMENT:")
+print(f"  → segment_id      = {t['segment_id']}")
+print(f"  → party_block     = {t.get('party_block', '?')}")
+print(f"  → seg_probability = {t.get('seg_probability', '?')}")
+print(f"  → seg_gap         = {t.get('seg_gap', '?')}")
+print(f"  → seg_entropy     = {t.get('seg_entropy', '?')}")
+print(f"  → study_code      = {t['study_code']}")
+print(f"  → xrandom4        = {t['xrandom4']}")
+print(f"  → xinvestvar       = {t['xinvestvar']}")
+print(f"  → msg_version      = {t['msg_version']}")
+all_probs = t.get('all_probs', {})
+if all_probs:
+    print(f"\n  SOFTMAX PROBABILITIES (all 16 segments):")
+    for seg_id in sorted(all_probs.keys(), key=lambda x: int(x)):
+        p = all_probs[seg_id]
+        bar = '█' * int(p * 80)
+        marker = ' ← ASSIGNED' if int(seg_id) == t['segment_id'] else ''
+        print(f"  Seg {seg_id:>2s}: {p:.4f} {bar}{marker}")
 
 # 4. Walk through study pages
 page_id = "pre_test.SECTORFAV"
