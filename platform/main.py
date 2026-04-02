@@ -461,6 +461,7 @@ async def get_study_page(
         is_persona   = is_persona,
         xinvestvar   = xinvestvar,
         msg_version  = msg_version,
+        conn         = db,
     )
 
     return {
@@ -812,6 +813,7 @@ def _resolve_page(
     is_persona:   bool,
     xinvestvar:   Optional[str],
     msg_version:  Optional[int],
+    conn=None,
 ) -> dict:
     """
     Resolve a page from study config to its displayable content.
@@ -830,7 +832,7 @@ def _resolve_page(
     var = rest[0] if rest else None
 
     if section == "msg_maxdiff":
-        return _resolve_maxdiff(study_config, segment_id, is_persona, msg_version)
+        return _resolve_maxdiff(study_config, segment_id, is_persona, msg_version, conn=conn)
 
     if section == "investment":
         return _resolve_investment(study_config, xinvestvar)

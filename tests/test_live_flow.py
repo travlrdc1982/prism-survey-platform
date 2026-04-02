@@ -122,7 +122,7 @@ page_id = "pre_test.SECTORFAV"
 pages_visited = []
 
 # Walk through a few pages (not all — just enough to verify flow)
-MAX_PAGES = 8
+MAX_PAGES = 50  # Walk the entire instrument
 
 for i in range(MAX_PAGES):
     # GET the page content
