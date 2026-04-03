@@ -149,14 +149,13 @@ function PreferNotToRespond({ checked, onChange }) {
 function QuestionCard({ number, total, visible, children, title, helperText }) {
   if (!visible) return null;
   return (
-    <div className="screener-question" data-question={number}>
-      <div className="screener-question-top-row">
-        <div className="screener-question-label">Q{number}</div>
-        <div className="screener-question-counter">{number} of {total} Questions</div>
+    <div className="screener-question-wrapper">
+      <div className="screener-question-counter">{number} of {total} Questions</div>
+      <div className="screener-question" data-question={number}>
+        <div className="screener-question-title">{title}</div>
+        {helperText && <div className="screener-question-helper">{helperText}</div>}
+        <div className="screener-question-body">{children}</div>
       </div>
-      <div className="screener-question-title">{title}</div>
-      {helperText && <div className="screener-question-helper">{helperText}</div>}
-      <div className="screener-question-body">{children}</div>
     </div>
   );
 }
