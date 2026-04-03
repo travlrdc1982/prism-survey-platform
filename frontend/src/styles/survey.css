@@ -200,65 +200,58 @@ body {
 /* ────── Horizontal Radio (screener / demographics) ────── */
 .horizontal-radio-group {
   display: flex;
-  gap: 16px;
+  gap: 10px;
   margin-top: 16px;
   flex-wrap: wrap;
-  justify-content: flex-start;
 }
 .horizontal-radio-btn {
   display: flex;
-  flex-direction: column;
   align-items: center;
   gap: 8px;
-  padding: 16px 24px;
-  border: 2px solid var(--border-light);
-  border-radius: 12px;
+  padding: 12px 20px;
+  border: 1.5px solid var(--border-light);
+  border-radius: 28px;
   background: var(--bg-card);
   cursor: pointer;
   font-family: var(--font-secondary);
-  font-size: 14px;
-  font-weight: 500;
+  font-size: 15px;
   transition: all 0.15s;
-  min-width: 90px;
-  text-align: center;
-  color: var(--text-primary);
+  flex: 1;
+  min-width: 0;
+  justify-content: center;
 }
 .horizontal-radio-btn:hover {
   border-color: var(--brand-green);
-  background: #f9f7f3;
 }
 .horizontal-radio-btn.selected {
   border-color: var(--brand-green);
   background: var(--card-selected-green);
 }
 .horizontal-radio-circle {
-  width: 36px;
-  height: 36px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
-  border: 2.5px solid var(--border-medium);
+  border: 2px solid var(--border-medium);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  background: #fafafa;
 }
 .horizontal-radio-btn.selected .horizontal-radio-circle {
   border-color: var(--radio-selected-green);
-  background: var(--radio-selected-green);
 }
 .horizontal-radio-dot {
-  width: 14px;
-  height: 14px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
-  background: #fff;
+  background: var(--radio-selected-green);
 }
 .horizontal-radio-icon {
-  font-size: 22px;
+  font-size: 18px;
   line-height: 1;
 }
 .horizontal-radio-label {
   white-space: nowrap;
-  font-size: 14px;
 }
 
 /* ────── Digit Boxes (ZIP / AGE) ────── */
@@ -268,24 +261,24 @@ body {
   margin-top: 16px;
 }
 .digit-box {
-  width: 52px;
-  height: 62px;
+  width: 48px;
+  height: 58px;
   text-align: center;
-  font-size: 26px;
+  font-size: 24px;
   font-family: 'Courier New', 'Consolas', monospace;
   font-weight: 700;
-  border: 2px solid #444;
+  border: 1px solid #555;
   border-radius: 6px;
   background: #3a3a3a;
   color: #fff;
   outline: none;
-  transition: border-color 0.15s, box-shadow 0.15s;
   caret-color: #fff;
+  transition: border-color 0.15s, box-shadow 0.15s;
 }
 .digit-box:focus {
   border-color: var(--brand-green);
-  box-shadow: 0 0 0 3px rgba(107, 127, 78, 0.25);
-  background: #2c2c2c;
+  box-shadow: 0 0 0 3px rgba(107, 127, 78, 0.2);
+  background: #2e2e2e;
 }
 
 /* ────── Prefer Not to Respond ────── */
@@ -378,38 +371,233 @@ body {
   padding: 48px 32px;
 }
 
-/* Ballot options (VOTE2024) — looks like an election ballot */
-.ballot-options {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  margin-top: 16px;
-  border: 2px solid #333;
-  border-radius: 4px;
-  overflow: hidden;
+/* ────── Screener: Logo + Progress Row ────── */
+.screener-logo-wrapper {
+  text-align: center;
+  margin-bottom: 8px;
 }
-.ballot-option {
+.screener-progress-row {
   display: flex;
   align-items: center;
-  gap: 14px;
-  padding: 14px 18px;
-  border-bottom: 1px dotted #999;
-  cursor: pointer;
-  font-size: 15px;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.screener-progress-bar {
+  flex: 1;
+  height: var(--progress-height);
+  background: var(--progress-track);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.screener-progress-fill {
+  height: 100%;
+  background: var(--progress-blue);
+  border-radius: 3px;
+  transition: width 0.3s;
+}
+.screener-progress-text {
   font-family: var(--font-secondary);
-  transition: background 0.15s;
+  font-size: 12px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+/* ────── Screener: Question Card ────── */
+.screener-question-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+.screener-question-counter {
+  font-family: var(--font-secondary);
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+.screener-question-helper {
+  font-family: var(--font-secondary);
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+  line-height: 1.4;
+}
+
+/* ────── Round Radio (Q1 vote, Q4 gender) ────── */
+.round-radio-group {
+  display: flex;
+  gap: 16px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+.round-radio-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  padding: 8px;
+  min-width: 80px;
+}
+.round-radio-circle {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 2.5px solid var(--radio-unselected);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
   background: var(--bg-card);
+  transition: all 0.15s;
 }
-.ballot-option:last-child {
-  border-bottom: none;
+.round-radio-circle:hover {
+  border-color: var(--brand-green);
 }
-.ballot-option:hover {
-  background: #f5f5f5;
+.round-radio-circle.selected {
+  border-color: var(--radio-selected-green);
+  background: var(--radio-selected-green);
+  color: #fff;
 }
-.ballot-option.selected {
+.round-radio-label {
+  font-family: var(--font-secondary);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+/* ────── Party Radio (Q6 party ID) ────── */
+.party-radio-group {
+  display: flex;
+  gap: 16px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+.party-radio-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  padding: 8px;
+  min-width: 90px;
+}
+.party-radio-circle {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 2.5px solid var(--radio-unselected);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-card);
+  overflow: hidden;
+  transition: all 0.15s;
+}
+.party-radio-circle:hover {
+  border-color: var(--brand-green);
+}
+.party-radio-circle.selected {
+  border-color: var(--radio-selected-green);
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+}
+.party-radio-circle.gop-color { border-color: #F2042E; }
+.party-radio-circle.gop-color.selected { border-color: #F2042E; background: #FFF0F0; }
+.party-radio-circle.dem-color { border-color: #0877C1; }
+.party-radio-circle.dem-color.selected { border-color: #0877C1; background: #F0F4FF; }
+.party-radio-circle img {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+}
+.party-radio-ind-text {
+  font-family: var(--font-secondary);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+.party-radio-label {
+  font-family: var(--font-secondary);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-primary);
+  text-align: center;
+}
+
+/* ────── Vertical Radio (Q5 ballot, Q7/Q8 party strength/lean) ────── */
+.vertical-radio-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 16px;
+}
+.vertical-radio-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background 0.12s;
+}
+.vertical-radio-item:hover {
+  background: #f5f3ef;
+}
+.vertical-radio-item.selected {
   background: var(--card-selected-green);
 }
-.ballot-option .option-radio {
+.vertical-radio-dot-outer {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid var(--radio-unselected);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.vertical-radio-item.selected .vertical-radio-dot-outer {
+  border-color: var(--radio-selected-green);
+}
+.vertical-radio-dot-inner {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--radio-selected-green);
+}
+.vertical-radio-text {
+  font-family: var(--font-secondary);
+  font-size: 15px;
+  color: var(--text-primary);
+}
+
+/* ────── Ballot Card (VOTE2024) ────── */
+.ballot-card {
+  border: 2px solid #444;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 16px;
+  background: var(--bg-card);
+}
+.ballot-card .vertical-radio-item {
+  border-bottom: 1px dotted #aaa;
+  border-radius: 0;
+  padding: 14px 18px;
+}
+.ballot-card .vertical-radio-item:last-child {
+  border-bottom: none;
+}
+.ballot-candidate-name {
+  font-family: var(--font-secondary);
+  font-size: 15px;
+}
+.ballot-party-tag {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-left: 4px;
+}
+.ballot-radio-outer {
   width: 22px;
   height: 22px;
   border-radius: 50%;
@@ -419,21 +607,84 @@ body {
   justify-content: center;
   flex-shrink: 0;
 }
-.ballot-option.selected .option-radio {
-  border-color: var(--radio-selected-green);
-}
-.ballot-option.selected .option-radio::after {
-  content: '';
+.ballot-radio-inner {
   width: 12px;
   height: 12px;
   border-radius: 50%;
   background: var(--radio-selected-green);
 }
-.ballot-option.party-R {
-  font-weight: 600;
+
+/* ────── Party2 label row ────── */
+.party2-label-row {
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+  align-items: center;
 }
-.ballot-option.party-D {
+.party2-label-row img {
+  width: 32px;
+  height: 32px;
+}
+
+/* ────── Screener CTA ────── */
+.btn-cta-pill {
+  display: block;
+  margin: 28px auto 0;
+  padding: 0 36px;
+  height: var(--cta-height);
+  background: var(--brand-green-dark);
+  color: #fff;
+  border: none;
+  border-radius: var(--cta-border-radius);
+  font-family: var(--font-secondary);
+  font-size: 14px;
   font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn-cta-pill:hover {
+  background: var(--brand-green);
+}
+.btn-continue-screener {
+  margin-top: 32px;
+}
+
+/* Ballot options (VOTE2024) */
+.ballot-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 16px;
+}
+.ballot-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border: 1.5px solid var(--border-light);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 15px;
+  transition: all 0.15s;
+}
+.ballot-option:hover {
+  border-color: var(--brand-green);
+}
+.ballot-option.selected {
+  border-color: var(--brand-green);
+  background: var(--card-selected-green);
+}
+.ballot-option.selected .option-radio {
+  border-color: var(--radio-selected-green);
+}
+.ballot-option.selected .option-radio::after {
+  content: '';
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--radio-selected-green);
 }
 
 /* Horizontal scale */
