@@ -3,9 +3,9 @@ import { useState, useRef } from 'react';
 /**
  * MaxDiff Typing Tool — page.group.3
  *
- * Shows cards of 4 statements each. User picks MOST LIKE ME (green, left)
- * and LEAST LIKE ME (red, right). Cards flip from right to left on advance.
- * Cannot select same row for both. CONTINUE disabled until both chosen.
+ * Large 3D sphere buttons. Green fill for MOST, red fill for LEAST.
+ * Row backgrounds change on selection. Centered statement text.
+ * Card flip animation on advance. Section header + card counter.
  */
 export default function TypingMaxDiff({ battery, onSubmit }) {
   const bibdTasks = battery?.bibd_tasks || [];
@@ -17,7 +17,7 @@ export default function TypingMaxDiff({ battery, onSubmit }) {
   const [responses, setResponses] = useState([]);
   const [best, setBest] = useState(null);
   const [worst, setWorst] = useState(null);
-  const [flipDirection, setFlipDirection] = useState(null); // 'flip-left' | null
+  const [flipDirection, setFlipDirection] = useState(null);
   const cardRef = useRef(null);
 
   const task = bibdTasks[currentTask] || [];
@@ -37,7 +37,6 @@ export default function TypingMaxDiff({ battery, onSubmit }) {
   const handleNext = () => {
     const newResponses = [...responses, { best, worst, task: currentTask }];
 
-    // Trigger flip animation
     setFlipDirection('flip-left');
 
     setTimeout(() => {
@@ -49,7 +48,6 @@ export default function TypingMaxDiff({ battery, onSubmit }) {
       if (currentTask < nTasks - 1) {
         setCurrentTask(currentTask + 1);
       } else {
-        // Reconstruct B-W scores per item, then map to item_ids
         const itemIds = battery?.item_ids || {};
         const nItems = Object.keys(itemIds).length;
         const bwScores = {};
@@ -58,7 +56,6 @@ export default function TypingMaxDiff({ battery, onSubmit }) {
           bwScores[r.best] = (bwScores[r.best] || 0) + 1;
           bwScores[r.worst] = (bwScores[r.worst] || 0) - 1;
         });
-        // Convert to {item_id: raw_score} for typing API
         const result = {};
         Object.entries(bwScores).forEach(([itemNum, score]) => {
           const itemId = itemIds[parseInt(itemNum)];
@@ -81,20 +78,37 @@ export default function TypingMaxDiff({ battery, onSubmit }) {
 
   return (
     <div className="survey-card typing-maxdiff-card">
+      {/* Section header */}
+      <div className="maxdiff-section-header">
+        <span className="maxdiff-section-title">SECTION 2: VALUES &amp; ATTITUDES</span>
+        <span className="maxdiff-section-counter">3 of 6 Questions</span>
+      </div>
+
+      <div className="progress-bar" style={{ marginBottom: 16 }}>
+        <div className="progress-fill" style={{ width: `${progress}%` }} />
+      </div>
+
       <div className="question-text">
         {battery?.question_text || 'Which of these is MOST and LEAST like you?'}
       </div>
       {battery?.comments_text && <div className="comments-text">{battery.comments_text}</div>}
 
-      {/* Task counter */}
+      {/* Instruction line with arrows */}
+      <div className="maxdiff-instruction-line">
+        <span className="maxdiff-arrow-green">&#x25C0;</span>
+        <span className="maxdiff-instruction-text">
+          Select one statement that sounds <strong>MOST</strong> like your own point of view,
+          and the one statement that sounds <strong>LEAST</strong> like you
+        </span>
+        <span className="maxdiff-arrow-red">&#x25B6;</span>
+      </div>
+
+      {/* Card counter */}
       <div className="maxdiff-task-counter">
         {currentTask + 1} of {nTasks} Cards
       </div>
-      <div className="progress-bar" style={{ marginBottom: 20 }}>
-        <div className="progress-fill" style={{ width: `${progress}%` }} />
-      </div>
 
-      {/* MaxDiff card */}
+      {/* MaxDiff card with flip */}
       <div
         ref={cardRef}
         className={`maxdiff-task${flipDirection ? ` ${flipDirection}` : ''}`}
@@ -123,7 +137,7 @@ export default function TypingMaxDiff({ battery, onSubmit }) {
                 tabIndex={0}
                 onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') handleBest(itemIdx); }}
               >
-                {isBest && <span className="sphere-check">{'\u2713'}</span>}
+                {isBest && <span className="sphere-check">&#x2713;</span>}
               </div>
               <div className="maxdiff-item-text">{text}</div>
               <div
@@ -135,7 +149,7 @@ export default function TypingMaxDiff({ battery, onSubmit }) {
                 tabIndex={0}
                 onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') handleWorst(itemIdx); }}
               >
-                {isWorst && <span className="sphere-check">{'\u2713'}</span>}
+                {isWorst && <span className="sphere-check">&#x2713;</span>}
               </div>
             </div>
           );
@@ -143,7 +157,7 @@ export default function TypingMaxDiff({ battery, onSubmit }) {
       </div>
 
       <button className="btn-next" disabled={!canAdvance} onClick={handleNext}>
-        {currentTask < nTasks - 1 ? 'CONTINUE >' : 'CONTINUE >'}
+        CONTINUE &gt;
       </button>
     </div>
   );

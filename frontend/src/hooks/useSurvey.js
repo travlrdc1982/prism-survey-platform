@@ -44,16 +44,20 @@ export function useSurvey() {
         setPhase('terminate');
         return;
       }
-      // Fetch typing battery BIBD tasks before showing typing phase
+      // Fetch typing battery BIBD tasks before showing typing intro
       const batteryData = await apiGet('/survey/typing/battery', { battery: data.battery });
       setBattery(batteryData);
-      setPhase('typing');
+      setPhase('typing_intro');
     } catch (e) {
       setError(e.message);
     } finally {
       setLoading(false);
     }
   }, [respId]);
+
+  const startTyping = useCallback(() => {
+    setPhase('typing');
+  }, []);
 
   const submitTyping = useCallback(async (rawResponses) => {
     setLoading(true);
@@ -123,7 +127,7 @@ export function useSurvey() {
   return {
     phase, respId, battery, studyCode, segmentId,
     pageId, pageContent, loading, error, progress, pageCount,
-    enter, submitScreener, submitTyping, submitPage,
+    enter, submitScreener, startTyping, submitTyping, submitPage,
     setError,
   };
 }

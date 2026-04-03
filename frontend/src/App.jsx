@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useSurvey } from './hooks/useSurvey';
 import Screener from './components/Screener';
+import TypingIntro from './components/TypingIntro';
 import TypingMaxDiff from './components/TypingMaxDiff';
 import SurveyPage from './components/SurveyPage';
 import PrismLogo from './components/PrismLogo';
@@ -10,7 +11,7 @@ function App() {
   const {
     phase, respId, battery, studyCode, segmentId,
     pageId, pageContent, loading, error, progress, pageCount,
-    enter, submitScreener, submitTyping, submitPage,
+    enter, submitScreener, startTyping, submitTyping, submitPage,
     setError,
   } = useSurvey();
 
@@ -105,6 +106,15 @@ function App() {
       {/* SCREENER phase */}
       {phase === 'screener' && !loading && (
         <Screener onSubmit={submitScreener} />
+      )}
+
+      {/* TYPING INTRO phase */}
+      {phase === 'typing_intro' && !loading && (
+        <TypingIntro
+          batteryType={battery?.battery}
+          nTasks={battery?.n_tasks}
+          onStart={startTyping}
+        />
       )}
 
       {/* TYPING phase */}

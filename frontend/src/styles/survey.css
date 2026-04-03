@@ -965,6 +965,60 @@ body {
 .typing-maxdiff-card {
   perspective: 1200px;
 }
+
+/* Section header bar */
+.maxdiff-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border-light);
+}
+.maxdiff-section-title {
+  font-family: var(--font-secondary);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--text-secondary);
+}
+.maxdiff-section-counter {
+  font-family: var(--font-secondary);
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+/* Instruction line with arrows */
+.maxdiff-instruction-line {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 16px 0 12px;
+  padding: 10px 14px;
+  background: #FAFAF7;
+  border-radius: 8px;
+  border: 1px solid var(--border-light);
+}
+.maxdiff-arrow-green {
+  color: var(--radio-selected-green);
+  font-size: 18px;
+  flex-shrink: 0;
+}
+.maxdiff-arrow-red {
+  color: var(--radio-selected-red);
+  font-size: 18px;
+  flex-shrink: 0;
+}
+.maxdiff-instruction-text {
+  font-family: var(--font-secondary);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  text-align: center;
+  flex: 1;
+}
+
 .maxdiff-task-counter {
   font-family: var(--font-secondary);
   font-size: 13px;
@@ -1000,10 +1054,10 @@ body {
 .maxdiff-row {
   display: flex;
   align-items: center;
-  padding: 14px 12px;
+  padding: 14px 14px;
   border: 1.5px solid var(--border-light);
-  border-radius: 8px;
-  margin-bottom: 6px;
+  border-radius: 10px;
+  margin-bottom: 8px;
   transition: background 0.15s, border-color 0.15s, box-shadow 0.2s;
 }
 .maxdiff-row:hover {
@@ -1018,45 +1072,64 @@ body {
   border-color: var(--radio-selected-red);
 }
 
-/* Spherical buttons for MaxDiff */
+/* Large spherical 3D buttons for MaxDiff */
 .maxdiff-sphere-btn {
-  width: 36px;
-  height: 36px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
-  border: 2.5px solid var(--border-medium);
+  border: 2px solid var(--border-medium);
   cursor: pointer;
   flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.15s;
-  background: linear-gradient(145deg, #f5f5f5, #e0e0e0);
-  box-shadow: 2px 2px 4px rgba(0,0,0,0.1), -1px -1px 2px rgba(255,255,255,0.8);
+  transition: all 0.18s ease;
+  background: radial-gradient(circle at 35% 35%, #f0ede8, #d5d0c8);
+  box-shadow:
+    3px 3px 6px rgba(0,0,0,0.15),
+    -2px -2px 4px rgba(255,255,255,0.7),
+    inset 0 1px 2px rgba(255,255,255,0.4);
 }
 .maxdiff-sphere-btn:hover {
-  transform: scale(1.08);
+  transform: scale(1.1);
+  box-shadow:
+    4px 4px 8px rgba(0,0,0,0.18),
+    -2px -2px 4px rgba(255,255,255,0.8),
+    inset 0 1px 2px rgba(255,255,255,0.5);
+}
+.maxdiff-sphere-btn:active {
+  transform: scale(0.96);
 }
 .maxdiff-sphere-best.selected {
-  border-color: var(--radio-selected-green);
-  background: linear-gradient(145deg, #66BB6A, #388E3C);
-  box-shadow: 2px 2px 6px rgba(56,142,60,0.4), -1px -1px 2px rgba(102,187,106,0.3);
+  border-color: #388E3C;
+  background: radial-gradient(circle at 35% 35%, #66BB6A, #2E7D32);
+  box-shadow:
+    3px 3px 8px rgba(46,125,50,0.4),
+    -2px -2px 4px rgba(102,187,106,0.3),
+    inset 0 1px 3px rgba(255,255,255,0.3);
 }
 .maxdiff-sphere-worst.selected {
-  border-color: var(--radio-selected-red);
-  background: linear-gradient(145deg, #EF5350, #C62828);
-  box-shadow: 2px 2px 6px rgba(198,40,40,0.4), -1px -1px 2px rgba(239,83,80,0.3);
+  border-color: #B71C1C;
+  background: radial-gradient(circle at 35% 35%, #EF5350, #B71C1C);
+  box-shadow:
+    3px 3px 8px rgba(183,28,28,0.4),
+    -2px -2px 4px rgba(239,83,80,0.3),
+    inset 0 1px 3px rgba(255,255,255,0.3);
 }
 .sphere-check {
   color: #fff;
-  font-size: 14px;
+  font-size: 18px;
   font-weight: 700;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
 }
 
 .maxdiff-item-text {
   flex: 1;
   padding: 0 16px;
+  font-family: var(--font-primary);
   font-size: 15px;
-  line-height: 1.4;
+  line-height: 1.5;
+  text-align: center;
 }
 
 /* ────── Typing Intro ────── */
@@ -1065,35 +1138,33 @@ body {
   padding: 48px 32px;
 }
 .typing-intro-logo {
-  margin-bottom: 24px;
+  margin-bottom: 28px;
   display: flex;
   justify-content: center;
 }
-.typing-intro-title {
-  font-family: var(--font-primary);
-  font-size: 26px;
-  font-weight: 600;
-  color: var(--text-primary);
-  margin-bottom: 20px;
-}
-.typing-intro-body {
-  text-align: left;
+.typing-intro-card {
+  background: var(--bg-card);
+  border-radius: var(--card-radius);
+  padding: 28px 24px;
+  margin-bottom: 32px;
+  text-align: center;
+  font-family: var(--font-secondary);
   font-size: 15px;
-  line-height: 1.6;
+  line-height: 1.7;
   color: var(--text-primary);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
 }
-.typing-intro-body p {
-  margin-bottom: 12px;
+.typing-intro-card p {
+  margin-bottom: 16px;
 }
-.typing-intro-battery-note {
-  color: var(--text-secondary);
-  font-style: italic;
+.typing-intro-card p:last-child {
+  margin-bottom: 0;
 }
 .btn-enjoy {
-  background: var(--brand-green);
   font-size: 18px;
-  letter-spacing: 1px;
-  padding: 16px 32px;
+  letter-spacing: 1.5px;
+  font-weight: 700;
+  padding: 16px 40px;
 }
 
 /* ────── DEM Attitude Vectors ────── */
