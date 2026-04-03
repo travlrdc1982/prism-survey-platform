@@ -675,6 +675,46 @@ body {
   margin-top: 32px;
 }
 
+/* ────── Entry / Intro Screen ────── */
+.entry-screen {
+  text-align: center;
+  padding-top: 40px;
+}
+.entry-card {
+  background: var(--bg-card);
+  border-radius: var(--card-radius);
+  border: 1px solid var(--card-border);
+  box-shadow: var(--card-shadow);
+  padding: 32px 28px;
+  margin: 24px 0;
+  text-align: center;
+}
+.entry-intro-text {
+  font-family: var(--font-primary);
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+/* ────── Ballot: "didn't vote" row ────── */
+.ballot-didnt-vote {
+  padding: 12px 18px;
+  font-family: var(--font-secondary);
+  font-size: 13px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  border-top: 1px solid var(--border-light);
+  transition: background 0.12s;
+}
+.ballot-didnt-vote:hover {
+  background: #f8f6f2;
+}
+.ballot-didnt-vote.selected {
+  background: var(--card-selected-green);
+  color: var(--text-primary);
+}
+
 /* Ballot options (VOTE2024) */
 .ballot-options {
   display: flex;
