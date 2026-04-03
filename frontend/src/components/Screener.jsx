@@ -51,24 +51,81 @@ function DigitBoxes({ count, value, onChange, id }) {
   );
 }
 
-function HorizontalRadio({ options, value, onChange }) {
+/* Round circle radio buttons (Q1, Q4 style) */
+function RoundRadioGroup({ options, value, onChange }) {
   return (
-    <div className="horizontal-radio-group">
+    <div className="round-radio-group">
       {options.map((opt) => {
         const isSelected = value === opt.value;
         return (
           <button
             key={opt.value}
             type="button"
-            className={`horizontal-radio-btn${isSelected ? ' selected' : ''}`}
+            className={`round-radio-item${isSelected ? ' selected' : ''}`}
+            onClick={() => onChange(opt.value)}
+            aria-pressed={isSelected}
+          >
+            <span className={`round-radio-circle${isSelected ? ' selected' : ''}`}>
+              {isSelected && (
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M3 8.5L6.5 12L13 4" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              )}
+            </span>
+            <span className="round-radio-label">{opt.label}</span>
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+/* Party icon radio (Q6 style) with large round buttons + icons */
+function PartyRadioGroup({ options, value, onChange }) {
+  return (
+    <div className="party-radio-group">
+      {options.map((opt) => {
+        const isSelected = value === opt.value;
+        return (
+          <button
+            key={opt.value}
+            type="button"
+            className={`party-radio-item${isSelected ? ' selected' : ''}`}
+            onClick={() => onChange(opt.value)}
+            aria-pressed={isSelected}
+          >
+            <span className={`party-radio-circle ${opt.colorClass || ''}${isSelected ? ' selected' : ''}`}>
+              {opt.iconSrc ? (
+                <img src={opt.iconSrc} alt={opt.label} width={28} height={28} />
+              ) : (
+                <span className="party-radio-ind-text">{opt.iconText || 'IND'}</span>
+              )}
+            </span>
+            <span className="party-radio-label">{opt.label}</span>
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+/* Vertical radio list for party strength (Q7) and lean (Q8) */
+function VerticalRadioGroup({ options, value, onChange }) {
+  return (
+    <div className="vertical-radio-list">
+      {options.map((opt) => {
+        const isSelected = value === opt.value;
+        return (
+          <div
+            key={opt.value}
+            className={`vertical-radio-item${isSelected ? ' selected' : ''}`}
             onClick={() => onChange(opt.value)}
           >
-            <span className="horizontal-radio-circle">
-              {isSelected && <span className="horizontal-radio-dot" />}
+            <span className="vertical-radio-dot-outer">
+              {isSelected && <span className="vertical-radio-dot-inner" />}
             </span>
-            {opt.icon && <span className="horizontal-radio-icon">{opt.icon}</span>}
-            <span className="horizontal-radio-label">{opt.label}</span>
-          </button>
+            <span className="vertical-radio-text">{opt.label}</span>
+          </div>
         );
       })}
     </div>
@@ -88,12 +145,16 @@ function PreferNotToRespond({ checked, onChange }) {
   );
 }
 
-function QuestionCard({ number, visible, children, title }) {
+function QuestionCard({ number, total, visible, children, title, helperText }) {
   if (!visible) return null;
   return (
     <div className="screener-question" data-question={number}>
-      <div className="screener-question-label">Q{number}</div>
+      <div className="screener-question-top-row">
+        <div className="screener-question-label">Q{number}</div>
+        <div className="screener-question-counter">{number} of {total} Questions</div>
+      </div>
       <div className="screener-question-title">{title}</div>
+      {helperText && <div className="screener-question-helper">{helperText}</div>}
       <div className="screener-question-body">{children}</div>
     </div>
   );
@@ -270,23 +331,26 @@ export default function Screener({ onSubmit, onTerminate }) {
   if (hasAnswer('party3')) answeredCount++;
   const progress = (answeredCount / totalQuestions) * 100;
 
+  const partyLabel = answers.party1 === 'GOP' ? 'Republican' : 'Democrat';
+
   return (
     <div className="screener-page">
-      <div className="screener-header">
+      {/* Logo centered at top */}
+      <div className="screener-logo-wrapper">
         <PrismLogo size="md" />
-        <div className="screener-header-text">
-          <h2 className="screener-title">PRISM Survey</h2>
-          <p className="screener-subtitle">Screener Qualification</p>
+      </div>
+
+      {/* Progress bar */}
+      <div className="screener-progress-row">
+        <div className="screener-progress-bar">
+          <div className="screener-progress-fill" style={{ width: `${progress}%` }} />
         </div>
+        <span className="screener-progress-text">{answeredCount} of {totalQuestions} Questions</span>
       </div>
 
-      <div className="progress-bar" style={{ marginBottom: 24 }}>
-        <div className="progress-fill" style={{ width: `${progress}%` }} />
-      </div>
-
-      {/* Q1: QVOTE */}
-      <QuestionCard number={1} visible={true} title="Are you registered to vote?">
-        <HorizontalRadio
+      {/* Q1: QVOTE - STYLE.HORIZONTAL.RADIO (round circles) */}
+      <QuestionCard number={1} total={totalQuestions} visible={true} title="Are you registered to vote?">
+        <RoundRadioGroup
           value={answers.qvote}
           onChange={val => {
             set('qvote', val);
@@ -295,15 +359,21 @@ export default function Screener({ onSubmit, onTerminate }) {
             }
           }}
           options={[
-            { value: 'YES', label: 'Yes', icon: '\u2713' },
+            { value: 'YES', label: 'Yes' },
             { value: 'NO', label: 'No' },
             { value: 'NOT_SURE', label: 'Not Sure' },
           ]}
         />
       </QuestionCard>
 
-      {/* Q2: ZIP */}
-      <QuestionCard number={2} visible={showZip} title="Please enter your 5-digit Zip Code">
+      {/* Q2: ZIP - STYLE.DIGITBOXES */}
+      <QuestionCard
+        number={2}
+        total={totalQuestions}
+        visible={showZip}
+        title="Please enter your 5-digit Zip Code"
+        helperText="Your zip code helps us understand regional perspectives."
+      >
         <DigitBoxes
           count={5}
           value={answers.zip || ''}
@@ -321,8 +391,14 @@ export default function Screener({ onSubmit, onTerminate }) {
         />
       </QuestionCard>
 
-      {/* Q3: AGE */}
-      <QuestionCard number={3} visible={showAge} title="What is your age?">
+      {/* Q3: AGE - STYLE.DIGITBOXES */}
+      <QuestionCard
+        number={3}
+        total={totalQuestions}
+        visible={showAge}
+        title="What is your age?"
+        helperText="Tell us how old you are. (We won't tell.)"
+      >
         <DigitBoxes
           count={2}
           value={answers.age || ''}
@@ -346,9 +422,9 @@ export default function Screener({ onSubmit, onTerminate }) {
         })()}
       </QuestionCard>
 
-      {/* Q4: GENDER */}
-      <QuestionCard number={4} visible={showGender} title="What is your gender?">
-        <HorizontalRadio
+      {/* Q4: GENDER - STYLE.HORIZONTAL.RADIO (round circles) */}
+      <QuestionCard number={4} total={totalQuestions} visible={showGender} title="What is your gender?">
+        <RoundRadioGroup
           value={answers.gender}
           onChange={val => set('gender', val)}
           options={[
@@ -368,24 +444,37 @@ export default function Screener({ onSubmit, onTerminate }) {
         />
       </QuestionCard>
 
-      {/* Q5: VOTE2024 */}
-      <QuestionCard number={5} visible={showVote2024} title="Who did you vote for in the latest (2024) Presidential election?">
-        <div className="ballot-options">
+      {/* Q5: VOTE2024 - CUSTOM.BALLOT */}
+      <QuestionCard
+        number={5}
+        total={totalQuestions}
+        visible={showVote2024}
+        title="Who did you vote for in the latest (2024) Presidential election?"
+      >
+        <div className="ballot-card">
           {[
-            { value: 'TRUMP', label: 'Donald J Trump (R)', party: 'R' },
-            { value: 'HARRIS', label: 'Kamala Harris (D)', party: 'D' },
-            { value: 'OTHER', label: 'Another Candidate' },
-            { value: 'DID_NOT_VOTE', label: "I didn't have the chance to vote in this election" },
+            { value: 'TRUMP', label: 'Donald J Trump', party: 'R' },
+            { value: 'HARRIS', label: 'Kamala Harris', party: 'D' },
+            { value: 'OTHER', label: 'Another Candidate', party: null },
           ].map(opt => (
             <div
               key={opt.value}
-              className={`ballot-option${answers.vote2024 === opt.value ? ' selected' : ''}${opt.party ? ` party-${opt.party}` : ''}`}
+              className={`ballot-row${answers.vote2024 === opt.value ? ' selected' : ''}${opt.party ? ` ballot-party-${opt.party}` : ' ballot-other'}`}
               onClick={() => set('vote2024', opt.value)}
             >
-              <div className="option-radio" />
-              <span>{opt.label}</span>
+              <span className="ballot-radio-outer">
+                {answers.vote2024 === opt.value && <span className="ballot-radio-inner" />}
+              </span>
+              <span className="ballot-candidate-name">{opt.label}</span>
+              {opt.party && <span className="ballot-party-tag">({opt.party})</span>}
             </div>
           ))}
+          <div
+            className={`ballot-didnt-vote${answers.vote2024 === 'DID_NOT_VOTE' ? ' selected' : ''}`}
+            onClick={() => set('vote2024', 'DID_NOT_VOTE')}
+          >
+            I didn&rsquo;t have the chance to vote in this election
+          </div>
         </div>
         <PreferNotToRespond
           checked={!!preferNot.vote2024}
@@ -398,9 +487,14 @@ export default function Screener({ onSubmit, onTerminate }) {
         />
       </QuestionCard>
 
-      {/* Q6: PARTY1 */}
-      <QuestionCard number={6} visible={showParty1} title="In politics today, do you consider yourself a...?">
-        <HorizontalRadio
+      {/* Q6: PARTY1 - CUSTOM.PARTYID */}
+      <QuestionCard
+        number={6}
+        total={totalQuestions}
+        visible={showParty1}
+        title="In politics today, do you consider yourself a...?"
+      >
+        <PartyRadioGroup
           value={answers.party1}
           onChange={val => {
             set('party1', val);
@@ -413,9 +507,9 @@ export default function Screener({ onSubmit, onTerminate }) {
             });
           }}
           options={[
-            { value: 'GOP', label: 'Republican', icon: '\uD83D\uDC18' },
-            { value: 'DEM', label: 'Democrat', icon: '\uD83E\uDD93' },
-            { value: 'IND', label: 'Independent / Other' },
+            { value: 'GOP', label: 'Republican', iconSrc: '/GOP_icon.svg', colorClass: 'party-gop' },
+            { value: 'DEM', label: 'Democrat', iconSrc: '/DEM_icon.svg', colorClass: 'party-dem' },
+            { value: 'IND', label: 'Independent / Other', iconText: 'IND', colorClass: 'party-ind' },
           ]}
         />
         <PreferNotToRespond
@@ -427,26 +521,35 @@ export default function Screener({ onSubmit, onTerminate }) {
       {/* Q7: PARTY2 (conditional: GOP or DEM) */}
       <QuestionCard
         number={7}
+        total={totalQuestions}
         visible={showParty2}
-        title={`Would you say you are a strong or not-so-strong ${answers.party1 === 'GOP' ? 'Republican' : 'Democrat'}?`}
+        title={`Would you say you are a strong or not-so-strong ${partyLabel}?`}
       >
-        <HorizontalRadio
+        <VerticalRadioGroup
           value={answers.party2}
           onChange={val => set('party2', val)}
           options={[
-            { value: 'STRONG', label: `Strong ${answers.party1 === 'GOP' ? 'Republican' : 'Democrat'}` },
-            { value: 'NOT_STRONG', label: `Not-so-strong ${answers.party1 === 'GOP' ? 'Republican' : 'Democrat'}` },
+            { value: 'STRONG', label: `Strong ${partyLabel}` },
+            { value: 'NOT_STRONG', label: `Not-so-strong ${partyLabel}` },
           ]}
         />
+        {answers.party1 && (
+          <div className="party2-label-row">
+            {answers.party1 === 'GOP' && <img src="/GOP_icon.svg" alt="GOP" width={20} height={20} />}
+            {answers.party1 === 'DEM' && <img src="/DEM_icon.svg" alt="DEM" width={20} height={20} />}
+            <span>{partyLabel}</span>
+          </div>
+        )}
       </QuestionCard>
 
       {/* Q8: PARTY3 (conditional: Independent) */}
       <QuestionCard
         number={8}
+        total={totalQuestions}
         visible={showParty3}
         title="Do you lean toward the..."
       >
-        <HorizontalRadio
+        <VerticalRadioGroup
           value={answers.party3}
           onChange={val => set('party3', val)}
           options={[
@@ -459,7 +562,7 @@ export default function Screener({ onSubmit, onTerminate }) {
 
       {/* CONTINUE button */}
       {canSubmit() && (
-        <button className="btn-next btn-continue-cta" onClick={handleSubmit}>
+        <button className="btn-cta-pill btn-continue-screener" onClick={handleSubmit}>
           CONTINUE &gt;
         </button>
       )}

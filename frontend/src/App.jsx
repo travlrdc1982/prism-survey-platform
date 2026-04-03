@@ -67,7 +67,7 @@ function App() {
         <div className="loading">Loading...</div>
       )}
 
-      {/* ENTRY phase */}
+      {/* ENTRY phase — intro screen */}
       {phase === 'entry' && !loading && (
         <div className="entry-screen">
           <PrismLogo size="lg" />
