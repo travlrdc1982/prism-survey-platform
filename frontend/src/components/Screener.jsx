@@ -179,8 +179,12 @@ export default function Screener({ onSubmit, onTerminate }) {
 
   // Visibility flags
   const showZip = hasAnswer('qvote') && !checkTermAfterQvote();
-  const showAge = showZip && hasAnswer('zip') && !checkTermAfterZip();
-  const showGender = showAge && hasAnswer('age') && !checkTermAfterAge();
+  const zipComplete = answers.zip && answers.zip.length === 5 && /^\d{5}$/.test(answers.zip);
+  const showAge = showZip && (zipComplete || preferNot.zip) && !checkTermAfterZip();
+  const ageComplete = answers.age && answers.age.length === 2 && /^\d{2}$/.test(answers.age);
+  const ageNum = parseInt(answers.age, 10);
+  const ageValid = ageComplete && ageNum >= 18 && ageNum <= 96;
+  const showGender = showAge && (ageValid || preferNot.age) && !checkTermAfterAge();
   const showVote2024 = showGender && hasAnswer('gender') && !checkTermAfterGender();
   const showParty1 = showVote2024 && hasAnswer('vote2024') && !checkTermAfterVote2024();
   const showParty2 = showParty1 && hasAnswer('party1') && (answers.party1 === 'GOP' || answers.party1 === 'DEM');
@@ -224,14 +228,19 @@ export default function Screener({ onSubmit, onTerminate }) {
     }
 
     const partyValue = computePartyValue();
+
+    // Map frontend labels to backend numeric codes
+    const BALLOT_MAP = { TRUMP: 1, HARRIS: 2, OTHER: 3, DID_NOT_VOTE: 4 };
+    const GENDER_MAP = { MALE: 1, FEMALE: 2, OTHER: 3 };
+    const PARTY_MAP = { r1: 1, r2: 2, r3: 3, r4: 4, r5: 5, r6: 6, r7: 7 };
+
     const result = {
-      qvote: answers.qvote,
-      zip: answers.zip,
-      age: answers.age,
-      gender: answers.gender,
-      vote2024: answers.vote2024,
-      party1: answers.party1,
-      party_value: partyValue,
+      qvote: answers.qvote === 'YES' ? 1 : 2,
+      qballot: BALLOT_MAP[answers.vote2024] || 3,
+      qparty: PARTY_MAP[partyValue] || 4,
+      qgender: GENDER_MAP[answers.gender] || 3,
+      qage: parseInt(answers.age, 10) || null,
+      qzip: answers.zip || null,
     };
     onSubmit(result);
   };
