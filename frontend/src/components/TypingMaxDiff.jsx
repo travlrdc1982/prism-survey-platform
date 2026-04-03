@@ -1,14 +1,24 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 
+/**
+ * MaxDiff Typing Tool — page.group.3
+ *
+ * Shows cards of 4 statements each. User picks MOST LIKE ME (green, left)
+ * and LEAST LIKE ME (red, right). Cards flip from right to left on advance.
+ * Cannot select same row for both. CONTINUE disabled until both chosen.
+ */
 export default function TypingMaxDiff({ battery, onSubmit }) {
   const bibdTasks = battery?.bibd_tasks || [];
   const itemTexts = battery?.item_texts || [];
   const nTasks = battery?.n_tasks || bibdTasks.length;
+  const varPrefix = battery?.var || 'md';
 
   const [currentTask, setCurrentTask] = useState(0);
   const [responses, setResponses] = useState([]);
   const [best, setBest] = useState(null);
   const [worst, setWorst] = useState(null);
+  const [flipDirection, setFlipDirection] = useState(null); // 'flip-left' | null
+  const cardRef = useRef(null);
 
   const task = bibdTasks[currentTask] || [];
 
@@ -26,15 +36,28 @@ export default function TypingMaxDiff({ battery, onSubmit }) {
 
   const handleNext = () => {
     const newResponses = [...responses, { best, worst, task: currentTask }];
-    setResponses(newResponses);
-    setBest(null);
-    setWorst(null);
 
-    if (currentTask < nTasks - 1) {
-      setCurrentTask(currentTask + 1);
-    } else {
-      onSubmit(newResponses);
-    }
+    // Trigger flip animation
+    setFlipDirection('flip-left');
+
+    setTimeout(() => {
+      setResponses(newResponses);
+      setBest(null);
+      setWorst(null);
+      setFlipDirection(null);
+
+      if (currentTask < nTasks - 1) {
+        setCurrentTask(currentTask + 1);
+      } else {
+        // Build result
+        const result = {};
+        newResponses.forEach((r, ti) => {
+          result[`${varPrefix}_t${ti + 1}_best`] = r.best;
+          result[`${varPrefix}_t${ti + 1}_worst`] = r.worst;
+        });
+        onSubmit(result);
+      }
+    }, 350);
   };
 
   if (!bibdTasks.length) {
@@ -45,24 +68,31 @@ export default function TypingMaxDiff({ battery, onSubmit }) {
     );
   }
 
+  const progress = ((currentTask) / nTasks) * 100;
+
   return (
-    <div className="survey-card">
+    <div className="survey-card typing-maxdiff-card">
       <div className="question-text">
-        {battery?.question_text || 'Which of these is BEST and WORST at describing your views?'}
+        {battery?.question_text || 'Which of these is MOST and LEAST like you?'}
       </div>
       {battery?.comments_text && <div className="comments-text">{battery.comments_text}</div>}
 
-      <div style={{ fontSize: '13px', color: 'var(--text-secondary)', marginBottom: '16px' }}>
-        Task {currentTask + 1} of {nTasks}
+      {/* Task counter */}
+      <div className="maxdiff-task-counter">
+        {currentTask + 1} of {nTasks} Cards
       </div>
-      <div className="progress-bar" style={{ marginBottom: '20px' }}>
-        <div className="progress-fill" style={{ width: `${(currentTask / nTasks) * 100}%` }} />
+      <div className="progress-bar" style={{ marginBottom: 20 }}>
+        <div className="progress-fill" style={{ width: `${progress}%` }} />
       </div>
 
-      <div className="maxdiff-task">
+      {/* MaxDiff card */}
+      <div
+        ref={cardRef}
+        className={`maxdiff-task${flipDirection ? ` ${flipDirection}` : ''}`}
+      >
         <div className="maxdiff-task-header">
-          <span style={{ color: 'var(--text-green)' }}>Best</span>
-          <span style={{ color: 'var(--text-red)' }}>Worst</span>
+          <span className="maxdiff-header-best">MOST LIKE ME</span>
+          <span className="maxdiff-header-worst">LEAST LIKE ME</span>
         </div>
 
         {task.map((itemIdx, ri) => {
@@ -76,21 +106,35 @@ export default function TypingMaxDiff({ battery, onSubmit }) {
           return (
             <div key={ri} className={rowClass}>
               <div
-                className={`maxdiff-radio-best${isBest ? ' selected' : ''}`}
+                className={`maxdiff-sphere-btn maxdiff-sphere-best${isBest ? ' selected' : ''}`}
                 onClick={() => handleBest(itemIdx)}
-              />
+                role="radio"
+                aria-checked={isBest}
+                aria-label={`Most like me: ${text}`}
+                tabIndex={0}
+                onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') handleBest(itemIdx); }}
+              >
+                {isBest && <span className="sphere-check">{'\u2713'}</span>}
+              </div>
               <div className="maxdiff-item-text">{text}</div>
               <div
-                className={`maxdiff-radio-worst${isWorst ? ' selected' : ''}`}
+                className={`maxdiff-sphere-btn maxdiff-sphere-worst${isWorst ? ' selected' : ''}`}
                 onClick={() => handleWorst(itemIdx)}
-              />
+                role="radio"
+                aria-checked={isWorst}
+                aria-label={`Least like me: ${text}`}
+                tabIndex={0}
+                onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') handleWorst(itemIdx); }}
+              >
+                {isWorst && <span className="sphere-check">{'\u2713'}</span>}
+              </div>
             </div>
           );
         })}
       </div>
 
       <button className="btn-next" disabled={!canAdvance} onClick={handleNext}>
-        {currentTask < nTasks - 1 ? 'Next Task' : 'Continue'}
+        {currentTask < nTasks - 1 ? 'CONTINUE >' : 'CONTINUE >'}
       </button>
     </div>
   );
