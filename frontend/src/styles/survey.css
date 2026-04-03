@@ -446,16 +446,16 @@ body {
 }
 
 /* ────── Screener: Question Card ────── */
-.screener-question-top-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 4px;
+.screener-question-wrapper {
+  margin-bottom: 16px;
 }
 .screener-question-counter {
   font-family: var(--font-secondary);
   font-size: 11px;
   color: var(--text-secondary);
+  text-align: right;
+  margin-bottom: 4px;
+  padding-right: 4px;
 }
 .screener-question-helper {
   font-family: var(--font-secondary);
@@ -550,9 +550,12 @@ body {
   box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
 }
 /* Party color classes match component: party-gop, party-dem, party-ind */
-.party-radio-circle.party-gop.selected { border-color: #F2042E; background: #FFF0F0; box-shadow: 0 0 0 3px rgba(242,4,46,0.15); }
-.party-radio-circle.party-dem.selected { border-color: #0877C1; background: #F0F4FF; box-shadow: 0 0 0 3px rgba(8,119,193,0.15); }
-.party-radio-circle.party-ind.selected { border-color: var(--text-secondary); background: #f0efec; }
+.party-radio-circle.party-gop.selected { border-color: #F2042E; background: #F2042E; box-shadow: 0 0 0 3px rgba(242,4,46,0.15); }
+.party-radio-circle.party-gop.selected img { filter: brightness(0) invert(1); }
+.party-radio-circle.party-dem.selected { border-color: #0877C1; background: #0877C1; box-shadow: 0 0 0 3px rgba(8,119,193,0.15); }
+.party-radio-circle.party-dem.selected img { filter: brightness(0) invert(1); }
+.party-radio-circle.party-ind.selected { border-color: var(--text-secondary); background: var(--text-secondary); }
+.party-radio-circle.party-ind.selected .party-radio-ind-text { color: #fff; }
 .party-radio-circle img {
   width: 42px;
   height: 42px;

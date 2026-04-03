@@ -310,6 +310,57 @@ async def submit_screener(
 
 # ── TYPING TOOL ───────────────────────────────────────────────────────────────
 
+@app.get("/survey/typing/battery")
+async def get_typing_battery(
+    battery: str = Query(..., description="GOP, DEM, or BOTH"),
+):
+    """
+    Serve typing battery BIBD tasks and item texts from prism_norms.db.
+    The frontend renders the MaxDiff tasks; responses go to POST /survey/typing.
+    """
+    from config import get_norms_db
+
+    conn = get_norms_db()
+    try:
+        # Get BIBD tasks
+        bibd_table = "typing_bibd_gop" if battery in ("GOP", "BOTH") else "typing_bibd_dem"
+        rows = conn.execute(
+            f"SELECT task_num, position, item_num FROM {bibd_table} ORDER BY task_num, position"
+        ).fetchall()
+        tasks = {}
+        for r in rows:
+            t = r[0]
+            if t not in tasks:
+                tasks[t] = []
+            tasks[t].append(r[2])  # item_num (r[2] is item_num, r[1] is position)
+
+        bibd_tasks = [tasks[t] for t in sorted(tasks)]
+
+        # Get item texts
+        bat_filter = "GOP" if battery in ("GOP", "BOTH") else "DEM"
+        items = conn.execute(
+            "SELECT item_id, item_order, item_text FROM typing_items WHERE battery = ? ORDER BY item_order",
+            (bat_filter,)
+        ).fetchall()
+        item_texts = {r[1]: r[2] for r in items}  # item_num → text
+        item_ids = {r[1]: r[0] for r in items}     # item_num → item_id
+
+        n_tasks = len(bibd_tasks)
+    finally:
+        conn.close()
+
+    return {
+        "battery": battery,
+        "bibd_tasks": bibd_tasks,
+        "item_texts": item_texts,
+        "item_ids": item_ids,
+        "n_tasks": n_tasks,
+        "items_per_task": len(bibd_tasks[0]) if bibd_tasks else 4,
+        "question_text": "Which of these is MOST and LEAST like you?",
+        "comments_text": "Select the one statement that sounds MOST like you, and the one that sounds LEAST like you.",
+    }
+
+
 @app.post("/survey/typing")
 async def submit_typing(
     payload: TypingPayload,

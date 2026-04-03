@@ -49,11 +49,20 @@ export default function TypingMaxDiff({ battery, onSubmit }) {
       if (currentTask < nTasks - 1) {
         setCurrentTask(currentTask + 1);
       } else {
-        // Build result
+        // Reconstruct B-W scores per item, then map to item_ids
+        const itemIds = battery?.item_ids || {};
+        const nItems = Object.keys(itemIds).length;
+        const bwScores = {};
+        for (let i = 1; i <= nItems; i++) bwScores[i] = 0;
+        newResponses.forEach(r => {
+          bwScores[r.best] = (bwScores[r.best] || 0) + 1;
+          bwScores[r.worst] = (bwScores[r.worst] || 0) - 1;
+        });
+        // Convert to {item_id: raw_score} for typing API
         const result = {};
-        newResponses.forEach((r, ti) => {
-          result[`${varPrefix}_t${ti + 1}_best`] = r.best;
-          result[`${varPrefix}_t${ti + 1}_worst`] = r.worst;
+        Object.entries(bwScores).forEach(([itemNum, score]) => {
+          const itemId = itemIds[parseInt(itemNum)];
+          if (itemId) result[itemId] = score;
         });
         onSubmit(result);
       }

@@ -44,7 +44,9 @@ export function useSurvey() {
         setPhase('terminate');
         return;
       }
-      setBattery(data.battery);
+      // Fetch typing battery BIBD tasks before showing typing phase
+      const batteryData = await apiGet('/survey/typing/battery', { battery: data.battery });
+      setBattery(batteryData);
       setPhase('typing');
     } catch (e) {
       setError(e.message);
@@ -59,7 +61,7 @@ export function useSurvey() {
     try {
       const data = await apiPost('/survey/typing', {
         resp_id: respId,
-        battery,
+        battery: battery?.battery || battery,
         raw_responses: rawResponses,
       });
       if (data.status === 'overquota') {
