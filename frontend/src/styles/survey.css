@@ -267,18 +267,18 @@ body {
   font-size: 24px;
   font-family: 'Courier New', 'Consolas', monospace;
   font-weight: 700;
-  border: 1px solid #555;
+  border: 2px solid var(--border-light);
   border-radius: 6px;
-  background: #3a3a3a;
-  color: #fff;
+  background: var(--bg-card);
+  color: var(--text-primary);
   outline: none;
-  caret-color: #fff;
+  caret-color: var(--text-primary);
   transition: border-color 0.15s, box-shadow 0.15s;
 }
 .digit-box:focus {
   border-color: var(--brand-green);
   box-shadow: 0 0 0 3px rgba(107, 127, 78, 0.2);
-  background: #2e2e2e;
+  background: var(--bg-card);
 }
 
 /* ────── Prefer Not to Respond ────── */
@@ -506,12 +506,10 @@ body {
   border-color: var(--radio-selected-green);
   box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
 }
-.party-radio-circle.party-gop { border-color: #F2042E; }
-.party-radio-circle.party-gop.selected { border-color: #F2042E; background: #FFF0F0; }
-.party-radio-circle.party-dem { border-color: #0877C1; }
-.party-radio-circle.party-dem.selected { border-color: #0877C1; background: #F0F4FF; }
-.party-radio-circle.party-ind { border-color: var(--radio-unselected); }
-.party-radio-circle.party-ind.selected { border-color: var(--text-secondary); background: #f5f3ef; }
+/* Party color classes match component: party-gop, party-dem, party-ind */
+.party-radio-circle.party-gop.selected { border-color: #F2042E; background: #FFF0F0; box-shadow: 0 0 0 3px rgba(242,4,46,0.15); }
+.party-radio-circle.party-dem.selected { border-color: #0877C1; background: #F0F4FF; box-shadow: 0 0 0 3px rgba(8,119,193,0.15); }
+.party-radio-circle.party-ind.selected { border-color: var(--text-secondary); background: #f0efec; }
 .party-radio-circle img {
   width: 42px;
   height: 42px;
@@ -580,22 +578,37 @@ body {
 
 /* ────── Ballot Card (VOTE2024) ────── */
 .ballot-card {
-  border: 2px solid #444;
-  border-radius: 4px;
+  border: 2px solid #333;
+  border-radius: 2px;
   overflow: hidden;
   margin-top: 16px;
   background: var(--bg-card);
+  font-family: 'Courier New', 'Consolas', monospace;
+  position: relative;
+}
+.ballot-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 8px;
+  background: repeating-linear-gradient(
+    to bottom,
+    #333 0px, #333 4px,
+    var(--bg-card) 4px, var(--bg-card) 8px
+  );
 }
 .ballot-row {
   display: flex;
   align-items: center;
   gap: 14px;
-  padding: 13px 18px;
-  border-bottom: 1px dotted #aaa;
+  padding: 12px 18px 12px 20px;
+  border-bottom: 1px dotted #999;
   cursor: pointer;
   transition: background 0.12s;
-  font-family: var(--font-secondary);
-  font-size: 15px;
+  font-family: 'Courier New', 'Consolas', monospace;
+  font-size: 14px;
 }
 .ballot-row:last-child {
   border-bottom: none;
@@ -615,8 +628,9 @@ body {
   font-weight: 600;
 }
 .ballot-candidate-name {
-  font-family: var(--font-secondary);
-  font-size: 15px;
+  font-family: 'Courier New', 'Consolas', monospace;
+  font-size: 14px;
+  font-weight: 600;
 }
 .ballot-party-tag {
   font-size: 13px;
@@ -624,20 +638,21 @@ body {
   margin-left: 4px;
 }
 .ballot-radio-outer {
-  width: 22px;
-  height: 22px;
+  width: 28px;
+  height: 20px;
   border-radius: 50%;
-  border: 2px solid #666;
+  border: 2px solid #333;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  background: var(--bg-card);
 }
 .ballot-radio-inner {
-  width: 12px;
+  width: 18px;
   height: 12px;
   border-radius: 50%;
-  background: var(--radio-selected-green);
+  background: #333;
 }
 
 /* ────── Party2 label row ────── */
@@ -701,9 +716,9 @@ body {
 
 /* ────── Ballot: "didn't vote" row ────── */
 .ballot-didnt-vote {
-  padding: 12px 18px;
-  font-family: var(--font-secondary);
-  font-size: 13px;
+  padding: 10px 18px 10px 20px;
+  font-family: 'Courier New', 'Consolas', monospace;
+  font-size: 12px;
   color: var(--text-secondary);
   cursor: pointer;
   border-top: 1px solid var(--border-light);

@@ -1,7 +1,6 @@
 export default function PrismLogo({ size = 'md' }) {
-  const sizes = { sm: 32, md: 52, lg: 80 };
+  const sizes = { sm: 20, md: 32, lg: 40 };
   const dim = sizes[size] || sizes.md;
-  const textSize = size === 'lg' ? 20 : size === 'md' ? 14 : 10;
 
   return (
     <div
@@ -10,32 +9,16 @@ export default function PrismLogo({ size = 'md' }) {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        gap: size === 'lg' ? 8 : 4,
       }}
     >
       <img
         src="/prism_glyph.svg"
-        alt="PRISM logo"
+        alt="PRISM"
         width={dim}
         height={dim}
         style={{ display: 'block' }}
-        onError={(e) => {
-          // Fallback: hide broken image
-          e.target.style.display = 'none';
-        }}
+        onError={(e) => { e.target.style.display = 'none'; }}
       />
-      <span
-        style={{
-          fontFamily: "'Fraunces', Georgia, serif",
-          fontWeight: 700,
-          fontSize: textSize,
-          letterSpacing: 3,
-          color: '#2C261C',
-          textTransform: 'uppercase',
-        }}
-      >
-        PRISM
-      </span>
     </div>
   );
 }
