@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useSurvey } from './hooks/useSurvey';
 import Screener from './components/Screener';
 import TypingMaxDiff from './components/TypingMaxDiff';
@@ -32,6 +32,14 @@ function App() {
     }
   };
 
+  const hasPsidInUrl = new URLSearchParams(window.location.search).get('psid');
+
+  const handleReadySetGo = useCallback(() => {
+    // Generate a session psid and enter the survey
+    const psid = 'web_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8);
+    enter(psid, 'web');
+  }, [enter]);
+
   return (
     <div className="survey-container">
       {/* Progress bar for study phase */}
@@ -59,53 +67,37 @@ function App() {
         <div className="loading">Loading...</div>
       )}
 
-      {/* ENTRY phase */}
+      {/* ENTRY phase — intro screen */}
       {phase === 'entry' && !loading && (
-        <div style={{ textAlign: 'center', paddingTop: 60 }}>
+        <div className="entry-screen">
           <PrismLogo size="lg" />
-          <h1 style={{
-            fontFamily: 'var(--font-primary)',
-            fontSize: 28,
-            fontWeight: 600,
-            marginTop: 24,
-            marginBottom: 8,
-          }}>
-            PRISM Survey
-          </h1>
-          <p style={{
-            color: 'var(--text-secondary)',
-            fontSize: 15,
-            marginBottom: 32,
-          }}>
-            {new URLSearchParams(window.location.search).get('psid')
-              ? 'Connecting...'
-              : 'Enter your participant ID to begin.'}
-          </p>
 
-          {!new URLSearchParams(window.location.search).get('psid') && (
-            <div className="survey-card" style={{ textAlign: 'left' }}>
-              <div className="question-text" style={{ fontSize: 17 }}>Test Entry</div>
-              <div className="comments-text">Enter a PSID to start the survey.</div>
-              <input
-                type="text"
-                value={testPsid}
-                onChange={(e) => setTestPsid(e.target.value)}
-                placeholder="PSID"
-                onKeyDown={(e) => { if (e.key === 'Enter') handleTestEntry(); }}
-                style={{
-                  width: '100%',
-                  padding: '12px 16px',
-                  border: '1.5px solid var(--border-light)',
-                  borderRadius: 8,
-                  fontFamily: 'var(--font-secondary)',
-                  fontSize: 15,
-                  marginBottom: 8,
-                }}
-              />
-              <button className="btn-next" disabled={!testPsid.trim()} onClick={handleTestEntry}>
-                Begin Survey
-              </button>
-            </div>
+          <div className="entry-card">
+            <p className="entry-intro-text">
+              Thanks for taking part. This survey helps us understand how people
+              think about health care and public policy today. There are no right
+              or wrong answers &mdash; we&rsquo;re interested in your point of view.
+              Let&rsquo;s begin.
+            </p>
+          </div>
+
+          {!hasPsidInUrl && (
+            <button
+              className="btn-cta-pill"
+              onClick={handleReadySetGo}
+            >
+              READY, SET, GO!
+            </button>
+          )}
+
+          {hasPsidInUrl && (
+            <p style={{
+              color: 'var(--text-secondary)',
+              fontSize: 15,
+              fontFamily: 'var(--font-secondary)',
+            }}>
+              Connecting...
+            </p>
           )}
         </div>
       )}

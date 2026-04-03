@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" width="80" height="80">
+  <defs>
+    <linearGradient id="mountain-grad" x1="0" y1="1" x2="0.5" y2="0">
+      <stop offset="0%" stop-color="#605241"/>
+      <stop offset="50%" stop-color="#786A5A"/>
+      <stop offset="100%" stop-color="#E8D9D0"/>
+    </linearGradient>
+    <linearGradient id="arrow-grad" x1="0.5" y1="0" x2="0.5" y2="1">
+      <stop offset="0%" stop-color="#2C261C"/>
+      <stop offset="100%" stop-color="#605241"/>
+    </linearGradient>
+  </defs>
+  <!-- Back mountain -->
+  <polygon points="10,65 40,18 70,65" fill="#786A5A" opacity="0.6"/>
+  <!-- Front mountain -->
+  <polygon points="20,65 50,22 80,65" fill="url(#mountain-grad)"/>
+  <!-- Arrow / peak accent -->
+  <polygon points="50,22 45,34 50,30 55,34" fill="url(#arrow-grad)"/>
+  <!-- Snow cap -->
+  <polygon points="50,22 47,28 53,28" fill="#FEFEFC"/>
+  <!-- Ground line -->
+  <line x1="5" y1="65" x2="78" y2="65" stroke="#2C261C" stroke-width="1.5" stroke-linecap="round"/>
+</svg>

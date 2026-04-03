@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48">
+  <!-- Republican Elephant -->
+  <circle cx="24" cy="24" r="22" fill="none"/>
+  <!-- Body -->
+  <ellipse cx="24" cy="28" rx="14" ry="10" fill="#C62828"/>
+  <!-- Head -->
+  <circle cx="34" cy="18" r="7" fill="#C62828"/>
+  <!-- Ear -->
+  <ellipse cx="38" cy="13" rx="4" ry="6" fill="#E53935"/>
+  <!-- Ear inner -->
+  <ellipse cx="38" cy="13" rx="2.5" ry="4" fill="#EF9A9A"/>
+  <!-- Trunk -->
+  <path d="M39,21 Q42,26 40,30 Q38,33 36,30" stroke="#C62828" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <!-- Eye -->
+  <circle cx="35" cy="17" r="1.5" fill="white"/>
+  <circle cx="35.5" cy="17" r="0.7" fill="#333"/>
+  <!-- Tusk -->
+  <path d="M33,22 L31,25" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+  <!-- Legs -->
+  <line x1="16" y1="35" x2="14" y2="44" stroke="#C62828" stroke-width="3" stroke-linecap="round"/>
+  <line x1="22" y1="36" x2="21" y2="44" stroke="#C62828" stroke-width="3" stroke-linecap="round"/>
+  <line x1="28" y1="36" x2="29" y2="44" stroke="#C62828" stroke-width="3" stroke-linecap="round"/>
+  <line x1="33" y1="34" x2="35" y2="44" stroke="#C62828" stroke-width="3" stroke-linecap="round"/>
+  <!-- Tail -->
+  <path d="M10,26 Q6,22 8,18" stroke="#C62828" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <!-- Stars on body -->
+  <text x="20" y="30" font-size="6" fill="white" font-family="sans-serif">&#9733;&#9733;&#9733;</text>
+</svg>
