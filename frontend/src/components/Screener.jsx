@@ -1,5 +1,6 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import PrismLogo from './PrismLogo';
+import WhyWeAsk from './WhyWeAsk';
 
 /* ── Party value encoding ──
    r1 = Strong Republican
@@ -380,6 +381,11 @@ export default function Screener({ onSubmit, onTerminate }) {
           onChange={val => set('zip', val)}
           id="zip-input"
         />
+        <WhyWeAsk>
+          <p>Your ZIP code helps us understand how location shapes perspectives on different issues. It&rsquo;s for grouping responses by region, not identifying you individually.</p>
+          <strong>FUN FACT</strong>
+          <p>ZIP codes were created in 1963. The name stands for &ldquo;Zone Improvement Plan&rdquo; — the system was designed to help mail move faster, not to track spending or political preferences.</p>
+        </WhyWeAsk>
         <PreferNotToRespond
           checked={!!preferNot.zip}
           onChange={checked => {

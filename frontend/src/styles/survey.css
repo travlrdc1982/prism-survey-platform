@@ -292,6 +292,49 @@ body {
   color: var(--text-secondary);
   font-family: var(--font-secondary);
 }
+/* ────── Why We Ask / Engagement Callout ────── */
+.why-we-ask {
+  margin-top: 14px;
+}
+.why-we-ask-toggle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: #4bacb8;
+  color: #fff;
+  font-family: var(--font-secondary);
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+}
+.why-we-ask-toggle:hover {
+  background: #3a9aa6;
+}
+.why-we-ask-content {
+  background: var(--engagement-bg);
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin-top: 10px;
+  font-family: var(--font-secondary);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--text-primary);
+  animation: fadeSlideIn 0.2s ease;
+}
+.why-we-ask-content strong {
+  font-weight: 700;
+  display: block;
+  margin-bottom: 4px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
 .prefer-not-respond input[type="checkbox"] {
   width: 16px;
   height: 16px;
