@@ -506,13 +506,15 @@ body {
   border-color: var(--radio-selected-green);
   box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
 }
-.party-radio-circle.gop-color { border-color: #F2042E; }
-.party-radio-circle.gop-color.selected { border-color: #F2042E; background: #FFF0F0; }
-.party-radio-circle.dem-color { border-color: #0877C1; }
-.party-radio-circle.dem-color.selected { border-color: #0877C1; background: #F0F4FF; }
+.party-radio-circle.party-gop { border-color: #F2042E; }
+.party-radio-circle.party-gop.selected { border-color: #F2042E; background: #FFF0F0; }
+.party-radio-circle.party-dem { border-color: #0877C1; }
+.party-radio-circle.party-dem.selected { border-color: #0877C1; background: #F0F4FF; }
+.party-radio-circle.party-ind { border-color: var(--radio-unselected); }
+.party-radio-circle.party-ind.selected { border-color: var(--text-secondary); background: #f5f3ef; }
 .party-radio-circle img {
-  width: 36px;
-  height: 36px;
+  width: 42px;
+  height: 42px;
   object-fit: contain;
 }
 .party-radio-ind-text {
