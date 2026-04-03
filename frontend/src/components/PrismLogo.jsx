@@ -1,5 +1,5 @@
 export default function PrismLogo({ size = 'md' }) {
-  const sizes = { sm: 28, md: 44, lg: 64 };
+  const sizes = { sm: 32, md: 52, lg: 80 };
   const dim = sizes[size] || sizes.md;
   const textSize = size === 'lg' ? 20 : size === 'md' ? 14 : 10;
 
