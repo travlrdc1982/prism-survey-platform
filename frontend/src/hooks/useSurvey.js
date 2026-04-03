@@ -4,14 +4,16 @@ import { apiGet, apiPost } from './useApi';
 /**
  * Survey state machine.
  *
- * Phases: entry → screener → typing → study → complete/terminate/overquota
+ * Phases: entry → screener → typing_intro → typing → [typing_vectors] → study → complete/terminate/overquota
  *
- * The study phase loops: fetch page → render → collect response → submit → next page.
+ * DEM/BOTH batteries require an extra typing_vectors phase to collect
+ * attitude vectors before submitting to /survey/typing.
  */
 export function useSurvey() {
   const [phase, setPhase] = useState('entry');
   const [respId, setRespId] = useState(null);
   const [battery, setBattery] = useState(null);
+  const [typingResponses, setTypingResponses] = useState(null); // MaxDiff B-W scores held until vectors collected
   const [studyCode, setStudyCode] = useState(null);
   const [segmentId, setSegmentId] = useState(null);
   const [pageId, setPageId] = useState(null);
@@ -59,31 +61,6 @@ export function useSurvey() {
     setPhase('typing');
   }, []);
 
-  const submitTyping = useCallback(async (rawResponses) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const data = await apiPost('/survey/typing', {
-        resp_id: respId,
-        battery: battery?.battery || battery,
-        raw_responses: rawResponses,
-      });
-      if (data.status === 'overquota') {
-        setPhase('overquota');
-        return;
-      }
-      setStudyCode(data.study_code);
-      setSegmentId(data.segment_id);
-      // Fetch the first study page
-      await fetchPage('pre_test.SECTORFAV');
-      setPhase('study');
-    } catch (e) {
-      setError(e.message);
-    } finally {
-      setLoading(false);
-    }
-  }, [respId, battery]);
-
   const fetchPage = useCallback(async (pid) => {
     setLoading(true);
     setError(null);
@@ -97,6 +74,49 @@ export function useSurvey() {
       setLoading(false);
     }
   }, [respId]);
+
+  // Helper: POST combined responses to /survey/typing and advance to study
+  const postTypingAndAdvance = useCallback(async (allResponses) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await apiPost('/survey/typing', {
+        resp_id: respId,
+        battery: battery?.battery || battery,
+        raw_responses: allResponses,
+      });
+      if (data.status === 'overquota') {
+        setPhase('overquota');
+        return;
+      }
+      setStudyCode(data.study_code);
+      setSegmentId(data.segment_id);
+      await fetchPage('pre_test.SECTORFAV');
+      setPhase('study');
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setLoading(false);
+    }
+  }, [respId, battery, fetchPage]);
+
+  // After MaxDiff cards: either show vectors (DEM/BOTH) or submit immediately (GOP)
+  const submitMaxDiff = useCallback(async (bwScores) => {
+    const bat = battery?.battery || '';
+    const needsVectors = bat === 'DEM' || bat === 'BOTH';
+    if (needsVectors) {
+      setTypingResponses(bwScores);
+      setPhase('typing_vectors');
+    } else {
+      await postTypingAndAdvance(bwScores);
+    }
+  }, [battery, postTypingAndAdvance]);
+
+  // After attitude vectors: merge with MaxDiff and submit
+  const submitVectors = useCallback(async (vectorResponses) => {
+    const merged = { ...typingResponses, ...vectorResponses };
+    await postTypingAndAdvance(merged);
+  }, [typingResponses, postTypingAndAdvance]);
 
   const submitPage = useCallback(async (responses) => {
     setLoading(true);
@@ -127,7 +147,7 @@ export function useSurvey() {
   return {
     phase, respId, battery, studyCode, segmentId,
     pageId, pageContent, loading, error, progress, pageCount,
-    enter, submitScreener, startTyping, submitTyping, submitPage,
+    enter, submitScreener, startTyping, submitMaxDiff, submitVectors, submitPage,
     setError,
   };
 }

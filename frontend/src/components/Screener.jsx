@@ -87,6 +87,7 @@ function PartyRadioGroup({ options, value, onChange }) {
     <div className="party-radio-group">
       {options.map((opt) => {
         const isSelected = value === opt.value;
+        const iconSrc = isSelected && opt.iconSrcWhite ? opt.iconSrcWhite : opt.iconSrc;
         return (
           <button
             key={opt.value}
@@ -96,8 +97,8 @@ function PartyRadioGroup({ options, value, onChange }) {
             aria-pressed={isSelected}
           >
             <span className={`party-radio-circle ${opt.colorClass || ''}${isSelected ? ' selected' : ''}`}>
-              {opt.iconSrc ? (
-                <img src={opt.iconSrc} alt={opt.label} width={28} height={28} />
+              {iconSrc ? (
+                <img src={iconSrc} alt={opt.label} width={28} height={28} />
               ) : (
                 <span className="party-radio-ind-text">{opt.iconText || 'IND'}</span>
               )}
@@ -512,8 +513,8 @@ export default function Screener({ onSubmit, onTerminate }) {
             });
           }}
           options={[
-            { value: 'GOP', label: 'Republican', iconSrc: '/GOP_icon.svg', colorClass: 'party-gop' },
-            { value: 'DEM', label: 'Democrat', iconSrc: '/DEM_icon.svg', colorClass: 'party-dem' },
+            { value: 'GOP', label: 'Republican', iconSrc: '/GOP_icon.svg', iconSrcWhite: '/GOP_icon_white.svg', colorClass: 'party-gop' },
+            { value: 'DEM', label: 'Democrat', iconSrc: '/DEM_icon.svg', iconSrcWhite: '/DEM_icon_white.svg', colorClass: 'party-dem' },
             { value: 'IND', label: 'Independent / Other', iconText: 'IND', colorClass: 'party-ind' },
           ]}
         />

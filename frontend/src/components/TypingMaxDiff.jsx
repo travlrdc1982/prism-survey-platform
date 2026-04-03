@@ -11,7 +11,6 @@ export default function TypingMaxDiff({ battery, onSubmit }) {
   const bibdTasks = battery?.bibd_tasks || [];
   const itemTexts = battery?.item_texts || [];
   const nTasks = battery?.n_tasks || bibdTasks.length;
-  const varPrefix = battery?.var || 'md';
 
   const [currentTask, setCurrentTask] = useState(0);
   const [responses, setResponses] = useState([]);
@@ -88,24 +87,23 @@ export default function TypingMaxDiff({ battery, onSubmit }) {
         <div className="progress-fill" style={{ width: `${progress}%` }} />
       </div>
 
-      <div className="question-text">
-        {battery?.question_text || 'Which of these is MOST and LEAST like you?'}
+      {/* Card counter right-aligned */}
+      <div className="maxdiff-task-counter">
+        {currentTask + 1} of {nTasks} Cards
       </div>
-      {battery?.comments_text && <div className="comments-text">{battery.comments_text}</div>}
+
+      <div className="question-text">
+        {battery?.question_text || 'From the set of short statements expressing different points of view about politics, culture and health.'}
+      </div>
 
       {/* Instruction line with arrows */}
       <div className="maxdiff-instruction-line">
-        <span className="maxdiff-arrow-green">&#x25C0;</span>
+        <span className="maxdiff-arrow-red">&#x25C0;</span>
         <span className="maxdiff-instruction-text">
           Select one statement that sounds <strong>MOST</strong> like your own point of view,
           and the one statement that sounds <strong>LEAST</strong> like you
         </span>
-        <span className="maxdiff-arrow-red">&#x25B6;</span>
-      </div>
-
-      {/* Card counter */}
-      <div className="maxdiff-task-counter">
-        {currentTask + 1} of {nTasks} Cards
+        <span className="maxdiff-arrow-green">&#x25B6;</span>
       </div>
 
       {/* MaxDiff card with flip */}
@@ -114,8 +112,8 @@ export default function TypingMaxDiff({ battery, onSubmit }) {
         className={`maxdiff-task${flipDirection ? ` ${flipDirection}` : ''}`}
       >
         <div className="maxdiff-task-header">
-          <span className="maxdiff-header-best">MOST LIKE ME</span>
-          <span className="maxdiff-header-worst">LEAST LIKE ME</span>
+          <span className="maxdiff-header-worst">LEAST<br/>LIKE ME</span>
+          <span className="maxdiff-header-best">MOST<br/>LIKE ME</span>
         </div>
 
         {task.map((itemIdx, ri) => {
@@ -129,18 +127,6 @@ export default function TypingMaxDiff({ battery, onSubmit }) {
           return (
             <div key={ri} className={rowClass}>
               <div
-                className={`maxdiff-sphere-btn maxdiff-sphere-best${isBest ? ' selected' : ''}`}
-                onClick={() => handleBest(itemIdx)}
-                role="radio"
-                aria-checked={isBest}
-                aria-label={`Most like me: ${text}`}
-                tabIndex={0}
-                onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') handleBest(itemIdx); }}
-              >
-                {isBest && <span className="sphere-check">&#x2713;</span>}
-              </div>
-              <div className="maxdiff-item-text">{text}</div>
-              <div
                 className={`maxdiff-sphere-btn maxdiff-sphere-worst${isWorst ? ' selected' : ''}`}
                 onClick={() => handleWorst(itemIdx)}
                 role="radio"
@@ -150,6 +136,18 @@ export default function TypingMaxDiff({ battery, onSubmit }) {
                 onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') handleWorst(itemIdx); }}
               >
                 {isWorst && <span className="sphere-check">&#x2713;</span>}
+              </div>
+              <div className="maxdiff-item-text">{text}</div>
+              <div
+                className={`maxdiff-sphere-btn maxdiff-sphere-best${isBest ? ' selected' : ''}`}
+                onClick={() => handleBest(itemIdx)}
+                role="radio"
+                aria-checked={isBest}
+                aria-label={`Most like me: ${text}`}
+                tabIndex={0}
+                onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') handleBest(itemIdx); }}
+              >
+                {isBest && <span className="sphere-check">&#x2713;</span>}
               </div>
             </div>
           );

@@ -3,6 +3,7 @@ import { useSurvey } from './hooks/useSurvey';
 import Screener from './components/Screener';
 import TypingIntro from './components/TypingIntro';
 import TypingMaxDiff from './components/TypingMaxDiff';
+import DemAttitudeVectors from './components/DemAttitudeVectors';
 import SurveyPage from './components/SurveyPage';
 import PrismLogo from './components/PrismLogo';
 import SurveyFooter from './components/SurveyFooter';
@@ -11,7 +12,7 @@ function App() {
   const {
     phase, respId, battery, studyCode, segmentId,
     pageId, pageContent, loading, error, progress, pageCount,
-    enter, submitScreener, startTyping, submitTyping, submitPage,
+    enter, submitScreener, startTyping, submitMaxDiff, submitVectors, submitPage,
     setError,
   } = useSurvey();
 
@@ -117,9 +118,14 @@ function App() {
         />
       )}
 
-      {/* TYPING phase */}
+      {/* TYPING phase — MaxDiff cards */}
       {phase === 'typing' && !loading && (
-        <TypingMaxDiff battery={battery} onSubmit={submitTyping} />
+        <TypingMaxDiff battery={battery} onSubmit={submitMaxDiff} />
+      )}
+
+      {/* TYPING VECTORS phase — DEM/BOTH attitude vectors */}
+      {phase === 'typing_vectors' && !loading && (
+        <DemAttitudeVectors onSubmit={submitVectors} />
       )}
 
       {/* STUDY phase */}
