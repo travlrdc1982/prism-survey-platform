@@ -10,6 +10,11 @@ import InvestmentStimulus from './InvestmentStimulus';
 import Checklist from './Checklist';
 import Demographics from './Demographics';
 import OptIn from './OptIn';
+import Screener from './Screener';
+import TypingIntro from './TypingIntro';
+import TypingMaxDiff from './TypingMaxDiff';
+import DemAttitudeVectors from './DemAttitudeVectors';
+import Influence360 from './Influence360';
 
 const COMPONENT_MAP = {
   'STYLE.MATRIX': MatrixGrid,
@@ -28,6 +33,12 @@ const COMPONENT_MAP = {
   'CUSTOM.INVESTMENT': InvestmentStimulus,
   'CUSTOM.DEMOGRAPHICS': Demographics,
   'CUSTOM.OPTIN': OptIn,
+  'TYPINGTOOL.SCREENER': Screener,
+  'TYPINGTOOL.INTRO': TypingIntro,
+  'TYPINGTOOL.MAXDIFF.GOP': TypingMaxDiff,
+  'TYPINGTOOL.MAXDIFF.DEM': TypingMaxDiff,
+  'TYPINGTOOL.VECTORS.DEM': DemAttitudeVectors,
+  'INFLUENCE360': Influence360,
 };
 
 export default function SurveyPage({ content, onSubmit }) {
