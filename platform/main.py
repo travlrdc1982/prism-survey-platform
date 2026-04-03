@@ -182,6 +182,16 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+# CORS — allow frontend to call the API from a different origin
+from fastapi.middleware.cors import CORSMiddleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 app.dependency_overrides[get_db] = get_db_with_fallback
 
 
