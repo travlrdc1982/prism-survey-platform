@@ -36,7 +36,7 @@
   --max-content-width: 640px;
   --card-padding: 22px;
   --card-radius: 10px;
-  --card-shadow: none;
+  --card-shadow: 0 2px 8px rgba(0,0,0,0.08);
   --card-margin-bottom: 28px;
   --radio-size: 30px;
   --radio-gap: 44px;
@@ -77,16 +77,16 @@ body {
   background: var(--bg-card);
   border-radius: var(--card-radius);
   border: 1px solid var(--card-border);
-  box-shadow: none;
+  box-shadow: var(--card-shadow);
   padding: var(--card-padding);
   margin-bottom: var(--card-margin-bottom);
 }
 
 .question-text {
   font-family: var(--font-primary);
-  font-size: 19px;
+  font-size: 20px;
   font-weight: 700;
-  line-height: 1.4;
+  line-height: 1.35;
   margin-bottom: 6px;
   color: var(--text-primary);
 }
@@ -352,12 +352,12 @@ body {
   letter-spacing: 1px;
   text-transform: uppercase;
   color: var(--brand-green);
-  margin-bottom: 4px;
+  margin-bottom: 2px;
 }
 .screener-question-title {
   font-family: var(--font-primary);
-  font-size: 18px;
-  font-weight: 500;
+  font-size: 20px;
+  font-weight: 700;
   color: var(--text-primary);
   margin-bottom: 4px;
 }
@@ -464,7 +464,7 @@ body {
 }
 .round-radio-label {
   font-family: var(--font-secondary);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
   color: var(--text-primary);
 }
@@ -1368,18 +1368,21 @@ body {
   color: var(--text-primary);
 }
 
-/* Footer */
+/* Footer — spec: 10px, footer_gray #AAAAAA */
 .survey-footer {
   text-align: center;
-  padding: 32px 16px 16px;
-  font-size: 12px;
-  color: var(--text-secondary);
-  line-height: 1.5;
+  padding: 40px 16px 20px;
+  font-size: 10px;
+  color: var(--footer-gray);
+  line-height: 1.6;
+  font-family: var(--font-secondary);
+  border-top: 1px solid var(--border-light);
+  margin-top: 32px;
 }
 .footer-link {
-  color: var(--brand-green);
-  text-decoration: none;
+  color: var(--footer-gray);
+  text-decoration: underline;
 }
 .footer-link:hover {
-  text-decoration: underline;
+  color: var(--text-primary);
 }
