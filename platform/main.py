@@ -182,6 +182,16 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+# CORS — allow frontend to call the API from a different origin
+from fastapi.middleware.cors import CORSMiddleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 app.dependency_overrides[get_db] = get_db_with_fallback
 
 
@@ -332,6 +342,20 @@ async def submit_typing(
         all_probs       = result.all_probs,
     )
 
+    # Store D² distances and second-best segment in session_data
+    sorted_segs = sorted(result.all_probs.items(), key=lambda x: x[1], reverse=True)
+    xseg_final_2 = sorted_segs[1][0] if len(sorted_segs) > 1 else None
+    session.record_responses("typing_diagnostics", {
+        "d2_values":    {str(k): round(v, 4) for k, v in result.d2_values.items()},
+        "all_probs":    {str(k): round(v, 6) for k, v in result.all_probs.items()},
+        "xseg_final_1": result.segment_id,
+        "xseg_final_2": xseg_final_2,
+        "seg_probability": round(result.seg_probability, 6),
+        "seg_gap":      round(result.seg_gap, 6),
+        "seg_entropy":  round(result.seg_entropy, 6),
+        "party_block":  result.party_block,
+    })
+
     logger.info(
         f"Typed: resp_id={payload.resp_id} "
         f"seg={result.segment_id} P={result.seg_probability:.3f} "
@@ -417,10 +441,12 @@ async def submit_typing(
         "resp_id":         payload.resp_id,
         "study_code":      assigned_study,
         "segment_id":      result.segment_id,
+        "xseg_final_2":    xseg_final_2,
         "seg_probability":  round(result.seg_probability, 4),
         "seg_gap":          round(result.seg_gap, 4),
         "seg_entropy":      round(result.seg_entropy, 4),
         "all_probs":       {str(k): round(v, 4) for k, v in result.all_probs.items()},
+        "d2_values":       {str(k): round(v, 4) for k, v in result.d2_values.items()},
         "party_block":     result.party_block,
         "xrandom4":        xrandom4,
         "xinvestvar":      xinvestvar,
@@ -625,6 +651,7 @@ async def admin_export(
 
 
 
+@app.get("/admin/rebalance/{study_code}")
 async def admin_rebalance(
     study_code: str,
     db=Depends(get_db),
@@ -672,35 +699,6 @@ async def admin_initialize(
     }
 
 
-@app.get("/admin/export/{study_code}")
-async def admin_export(
-    study_code: str,
-    db=Depends(get_db),
-):
-    """
-    Export study data as SPSS .sav file. Completes only.
-    Returns file download — open directly in browser or wget.
-
-    Usage:
-        curl -o AL_export.sav http://host/admin/export/AL
-    """
-    from export import export_spss
-
-    study_config = load_study_config(study_code)
-
-    sav_bytes = export_spss(
-        conn         = db,
-        study_code   = study_code,
-        study_config = study_config,
-    )
-
-    filename = f"{study_code}_{datetime.now().strftime('%Y%m%d')}.sav"
-
-    return StreamingResponse(
-        io.BytesIO(sav_bytes),
-        media_type  = "application/octet-stream",
-        headers     = {"Content-Disposition": f"attachment; filename={filename}"},
-    )
 
 def _build_redirect_url(study_config: dict, redirect_type: str, psid: str) -> str:
     """Build Dynata redirect URL with psid token substitution."""

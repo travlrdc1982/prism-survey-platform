@@ -221,26 +221,38 @@ if t.get("status") == "overquota":
 
 print(f"\n{'─'*70}")
 print(f"TYPING (GOP battery):")
+print(f"  Raw B-W inputs (these are TEST DATA — not real MaxDiff scores):")
 for k, v in sorted(gop_responses.items()):
-    print(f"  {k:20s} = {v:+.1f}")
-print(f"\n  ASSIGNMENT:")
-print(f"  → segment_id      = {t['segment_id']}")
-print(f"  → party_block     = {t.get('party_block', '?')}")
-print(f"  → seg_probability = {t.get('seg_probability', '?')}")
-print(f"  → seg_gap         = {t.get('seg_gap', '?')}")
-print(f"  → seg_entropy     = {t.get('seg_entropy', '?')}")
-print(f"  → study_code      = {t['study_code']}")
-print(f"  → xrandom4        = {t['xrandom4']}")
-print(f"  → xinvestvar       = {t['xinvestvar']}")
-print(f"  → msg_version      = {t['msg_version']}")
+    print(f"    {k:20s} = {v:+.1f}")
+
+print(f"\n  SEGMENT ASSIGNMENT:")
+print(f"    xseg_final_1     = {t['segment_id']}")
+print(f"    xseg_final_2     = {t.get('xseg_final_2', '?')}")
+print(f"    party_block      = {t.get('party_block', '?')}")
+
+print(f"\n  CLASSIFICATION DIAGNOSTICS:")
+print(f"    seg_probability  = {t.get('seg_probability', '?')}")
+print(f"    seg_gap          = {t.get('seg_gap', '?')}")
+print(f"    seg_entropy      = {t.get('seg_entropy', '?')}")
+
+print(f"\n  ROUTING:")
+print(f"    study_code       = {t['study_code']}")
+print(f"    xrandom4         = {t['xrandom4']}")
+print(f"    xinvestvar       = {t['xinvestvar']}")
+print(f"    msg_version      = {t['msg_version']}")
+
 all_probs = t.get('all_probs', {})
+d2_values = t.get('d2_values', {})
 if all_probs:
-    print(f"\n  SOFTMAX PROBABILITIES (all 16 segments):")
+    print(f"\n  SOFTMAX P(segment) & MAHALANOBIS D²:")
+    print(f"  {'Seg':>5s}  {'P':>8s}  {'D²':>8s}  {'':40s}")
     for seg_id in sorted(all_probs.keys(), key=lambda x: int(x)):
         p = all_probs[seg_id]
-        bar = '█' * int(p * 80)
+        d2 = d2_values.get(seg_id, d2_values.get(str(seg_id), 0))
+        bar = '█' * int(p * 60)
         marker = ' ← ASSIGNED' if int(seg_id) == t['segment_id'] else ''
-        print(f"  Seg {seg_id:>2s}: {p:.4f} {bar}{marker}")
+        marker2 = ' ← 2nd' if int(seg_id) == t.get('xseg_final_2') else ''
+        print(f"  {seg_id:>5s}  {p:>8.4f}  {d2:>8.2f}  {bar}{marker}{marker2}")
 
 # 4. Walk through study pages
 page_id = "pre_test.SECTORFAV"

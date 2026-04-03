@@ -62,9 +62,7 @@ ROI_VARS = [
     ("position_score",   "ROI position component (coalition)"),
     ("activation_score", "ROI activation component"),
     ("influence_score",  "ROI influence component"),
-    ("roi_realtime",     "ROI total score"),
-    ("bcs",              "Behavioral Confirmation Score"),
-    ("ars_adj",          "Anchor Readiness Score"),
+    ("roi_total",        "ROI total score"),
 ]
 
 
@@ -138,7 +136,7 @@ def _load_roi_data(conn, study_code, resp_ids):
     with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
         cur.execute(
             f"SELECT resp_id, movement_score, position_score, "
-            f"activation_score, influence_score, roi_realtime, bcs, ars_adj "
+            f"activation_score, influence_score, roi_total "
             f"FROM respondent_roi "
             f"WHERE study_code = %s AND resp_id IN ({placeholders})",
             [study_code] + resp_ids
